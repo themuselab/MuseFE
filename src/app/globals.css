@@ -1,7 +1,239 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: system-ui, sans-serif;
+  /* ── Font tokens ── */
+  --font-sans: var(--font-pretendard), "Pretendard", system-ui, sans-serif;
+
+  /* ── Brand: Pink ── */
+  --color-pink-50: #FFF2F7;
+  --color-pink-100: #FFD1E3;
+  --color-pink-200: #FDAACB;
+  --color-pink-300: #F976AA;
+  --color-pink-400: #F3498D;
+  --color-pink-500: #E6196B;
+  --color-pink-600: #B41856;
+  --color-pink-700: #841541;
+  --color-pink-800: #59122E;
+  --color-pink-900: #350D1D;
+
+  /* ── Brand: Purple ── */
+  --color-purple-50: #FBF6FB;
+  --color-purple-100: #DFBAE3;
+  --color-purple-200: #CD92D3;
+  --color-purple-300: #BA64C4;
+  --color-purple-400: #A63EB1;
+  --color-purple-500: #862D8F;
+  --color-purple-600: #6A2173;
+  --color-purple-700: #521859;
+  --color-purple-800: #390F3D;
+  --color-purple-900: #220925;
+
+  /* ── Neutral ── */
+  --color-neutral-50: #FBFBFB;
+  --color-neutral-100: #F3F1F2;
+  --color-neutral-200: #E8E3E6;
+  --color-neutral-300: #D6D1D4;
+  --color-neutral-400: #B6AFB3;
+  --color-neutral-500: #92878C;
+  --color-neutral-600: #70666B;
+  --color-neutral-700: #534B4F;
+  --color-neutral-800: #383336;
+  --color-neutral-900: #201D1F;
+
+  /* ── Semantic: Error ── */
+  --color-error-50: #FFF1F0;
+  --color-error-100: #FFD5D1;
+  --color-error-200: #FFB0A8;
+  --color-error-300: #FF776B;
+  --color-error-400: #F44434;
+  --color-error-500: #D1291A;
+  --color-error-600: #A02318;
+  --color-error-700: #751D15;
+  --color-error-800: #4C1510;
+  --color-error-900: #2D0E0B;
+
+  /* ── Semantic: Warning ── */
+  --color-warning-50: #FFF9F0;
+  --color-warning-100: #FFECCC;
+  --color-warning-200: #FFDA99;
+  --color-warning-300: #FFBF52;
+  --color-warning-400: #FFA100;
+  --color-warning-500: #D1890E;
+  --color-warning-600: #A86B00;
+  --color-warning-700: #855400;
+  --color-warning-800: #5A3A02;
+  --color-warning-900: #302003;
+
+  /* ── Semantic: Success ── */
+  --color-success-50: #F3FCF8;
+  --color-success-100: #CEF3E2;
+  --color-success-200: #9DE7C4;
+  --color-success-300: #5ED49D;
+  --color-success-400: #31B97A;
+  --color-success-500: #258D5D;
+  --color-success-600: #1D6D48;
+  --color-success-700: #155135;
+  --color-success-800: #0F3422;
+  --color-success-900: #091B12;
+
+  /* ── Semantic: Info ── */
+  --color-info-50: #F0F7FE;
+  --color-info-100: #CFE4FC;
+  --color-info-200: #9CC6F7;
+  --color-info-300: #5EA1ED;
+  --color-info-400: #237EE7;
+  --color-info-500: #1866BF;
+  --color-info-600: #145094;
+  --color-info-700: #113D6F;
+  --color-info-800: #0D294A;
+  --color-info-900: #09182A;
+
+  /* ── Single tokens ── */
+  --color-white: #FFFFFF;
+
+  /* ── Gradients ── */
+  --gradient-soft: linear-gradient(135deg, #FFD1E3 0%, #DFBAE3 100%);
+  --gradient-mid: linear-gradient(135deg, #F3498D 0%, #A63EB1 100%);
+  --gradient-bold: linear-gradient(90deg, #E6196B 0%, #862D8F 100%);
+  --gradient-dark: linear-gradient(90deg, #841541 0%, #521859 100%);
+}
+
+/* ── Display ── */
+
+@utility text-display-2xl {
+  font-size: 4.5rem;
+  line-height: 1.17;
+  font-weight: 400;
+  letter-spacing: -0.025em;
+}
+
+@utility text-display-xl {
+  font-size: 3.5rem;
+  line-height: 1.21;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+@utility text-display-l {
+  font-size: 3rem;
+  line-height: 1.25;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+
+@utility text-display-m {
+  font-size: 2.5rem;
+  line-height: 1.20;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+@utility text-display-s {
+  font-size: 2rem;
+  line-height: 1.50;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+}
+
+/* ── Heading ── */
+
+@utility text-heading-l {
+  font-size: 1.75rem;
+  line-height: 1.43;
+  font-weight: 700;
+  letter-spacing: -0.003em;
+}
+
+@utility text-heading-m {
+  font-size: 1.5rem;
+  line-height: 1.50;
+  font-weight: 700;
+  letter-spacing: -0.002em;
+}
+
+@utility text-heading-s {
+  font-size: 1.25rem;
+  line-height: 1.60;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+@utility text-heading-xs {
+  font-size: 1.125rem;
+  line-height: 1.56;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+/* ── Body ── */
+
+@utility text-body-l {
+  font-size: 1rem;
+  line-height: 1.75;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+@utility text-body-m {
+  font-size: 0.875rem;
+  line-height: 1.71;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+@utility text-body-s {
+  font-size: 0.8125rem;
+  line-height: 1.54;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+/* ── Label ── */
+
+@utility text-label-l {
+  font-size: 1rem;
+  line-height: 1.00;
+  font-weight: 600;
+  letter-spacing: 0.002em;
+}
+
+@utility text-label-m {
+  font-size: 0.875rem;
+  line-height: 1.00;
+  font-weight: 600;
+  letter-spacing: 0.002em;
+}
+
+@utility text-label-s {
+  font-size: 0.75rem;
+  line-height: 1.00;
+  font-weight: 600;
+  letter-spacing: 0.003em;
+}
+
+/* ── Caption ── */
+
+@utility text-caption-m {
+  font-size: 0.875rem;
+  line-height: 1.14;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+@utility text-caption-s {
+  font-size: 0.75rem;
+  line-height: 1.33;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+/* ── Overline ── */
+
+@utility text-overline {
+  font-size: 0.6875rem;
+  line-height: 1.45;
+  font-weight: 600;
+  letter-spacing: 0.08em;
 }
 
 @layer base {
@@ -11,6 +243,7 @@
 
   body {
     font-family: var(--font-sans);
+    @apply text-body-l bg-neutral-50 text-neutral-900;
   }
 
   * {
