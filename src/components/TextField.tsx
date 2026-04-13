@@ -14,6 +14,7 @@ type TextFieldProps = {
   helperText?: string;
   state?: TextFieldState;
   rightIcon?: ReactNode;
+  reserveHelperSpace?: boolean;
 } & Omit<InputHTMLAttributes<HTMLInputElement>, "id">;
 
 const borderColorMap: Record<TextFieldState, string> = {
@@ -35,6 +36,7 @@ export function TextField({
   helperText,
   state = "default",
   rightIcon,
+  reserveHelperSpace = false,
   className = "",
   disabled,
   value,
@@ -77,8 +79,8 @@ export function TextField({
             "font-medium text-[14px] leading-[1.14]",
             labelColor,
             isFloating
-              ? "-top-[7px] bg-neutral-50 px-0.5"
-              : "top-3 bg-transparent",
+              ? "-top-1.75 bg-neutral-50 px-0.5"
+              : "top-1/2 -translate-y-1/2 bg-transparent",
             isDisabled && isFloating && "bg-neutral-300",
           ]
             .filter(Boolean)
@@ -89,7 +91,7 @@ export function TextField({
 
         <div
           className={[
-            "flex items-center rounded-[12px] border transition-colors",
+            "flex items-center rounded-xl border transition-colors",
             borderColor,
             inputBg,
             "px-3 py-3 gap-2",
@@ -125,16 +127,18 @@ export function TextField({
         </div>
       </div>
 
-      {helperText && (
+      {(helperText || reserveHelperSpace) && (
         <p
           className={[
             "mt-1 pl-3 text-[14px] leading-none font-normal",
-            focused && state === "default"
-              ? "text-pink-400"
-              : helperTextColorMap[state],
+            helperText
+              ? (focused && state === "default"
+                ? "text-pink-400"
+                : helperTextColorMap[state])
+              : "invisible",
           ].join(" ")}
         >
-          {helperText}
+          {helperText || "\u00A0"}
         </p>
       )}
     </div>
