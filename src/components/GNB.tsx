@@ -89,7 +89,7 @@ export function GNB({
   const isLanding = state === "landing";
 
   const containerClasses = [
-    "w-full max-w-[1440px] h-[88px] flex items-center px-[120px] py-4",
+    "w-full max-w-[1440px] mx-auto h-[88px] flex items-center px-[120px] py-4",
     "bg-neutral-50",
     isLanding
       ? "bg-neutral-50/60 rounded-full shadow-[0_1px_3.5px_#e8e3e6,0_2px_7px_rgba(32,29,31,0.13)]"
