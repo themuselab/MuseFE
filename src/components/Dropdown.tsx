@@ -96,8 +96,8 @@ export function Dropdown({
       {open && (
         <div
           className={[
-            "absolute top-full left-0 w-full z-50 border border-neutral-200 bg-neutral-50 overflow-hidden",
-            isLarge ? "rounded-[12px] mt-1" : "rounded-lg mt-1",
+            "absolute top-full left-0 w-full z-50 border border-neutral-200 bg-neutral-50 overflow-y-auto",
+            isLarge ? "rounded-[12px] mt-1 max-h-70" : "rounded-lg mt-1 max-h-50",
           ].join(" ")}
         >
           {items.map((item) => {

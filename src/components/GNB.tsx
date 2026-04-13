@@ -1,6 +1,7 @@
 "use client";
 
 import { type ReactNode } from "react";
+import Link from "next/link";
 import { GNBTabButton } from "@/components/GNBTabButton";
 import { Avatar } from "@/components/Avatar";
 
@@ -47,10 +48,27 @@ function BellIcon() {
   );
 }
 
-function LogoPlaceholder() {
+function MuseLogo() {
   return (
-    <div className="w-12 h-12 rounded-full bg-neutral-200 flex items-center justify-center shrink-0">
-      <span className="text-[16px] font-bold text-neutral-500">M</span>
+    <div className="w-12 h-12 shrink-0 flex items-center justify-center">
+      <svg width="44" height="23" viewBox="0 0 44 22.4" fill="none">
+        <defs>
+          <linearGradient id="muse-logo-gradient" x1="22" y1="0" x2="22" y2="22.4" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stopColor="#FFD1E3" />
+            <stop offset="100%" stopColor="#DFBAE3" />
+          </linearGradient>
+        </defs>
+        <path
+          d="M0 38.4V0.896H11.392V4.48C13.632 1.472 16.448 0 20.608 0C25.344 0 29.248 1.92 31.744 5.376C34.56 1.792 38.528 0 43.224 0C51.864 0 57.624 6.272 57.624 16.704V38.4H46.232V18.624C46.232 12.928 44.056 9.792 39.896 9.792C36.184 9.792 34.2 12.736 34.008 18.048V38.4H22.616V18.624C22.616 12.928 20.44 9.792 16.28 9.792C12.568 9.792 10.584 12.736 10.392 18.048V38.4H0Z"
+          fill="url(#muse-logo-gradient)"
+          transform="translate(0,0) scale(0.575)"
+        />
+        <path
+          d="M6.4 0C10.048 0 12.736 2.752 12.736 6.4C12.736 10.048 10.048 12.8 6.4 12.8C2.688 12.8 0 10.048 0 6.4C0 2.752 2.688 0 6.4 0Z"
+          fill="url(#muse-logo-gradient)"
+          transform="translate(36.67,15.02) scale(0.575)"
+        />
+      </svg>
     </div>
   );
 }
@@ -83,7 +101,7 @@ export function GNB({
     <nav className={containerClasses}>
       {/* 왼쪽: 로고 + 탭 */}
       <div className="flex items-center gap-8 flex-1">
-        {logo ?? <LogoPlaceholder />}
+        <Link href="/">{logo ?? <MuseLogo />}</Link>
         <div className="flex items-center gap-2">
           {tabs.map((tab) => (
             <GNBTabButton
