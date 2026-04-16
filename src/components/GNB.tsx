@@ -89,31 +89,32 @@ export function GNB({
   const isLanding = state === "landing";
 
   const containerClasses = [
-    "w-full max-w-[1440px] mx-auto h-[88px] flex items-center px-[120px] py-4",
+    "w-full lg:max-w-[1440px] lg:mx-auto h-[80px] lg:h-[88px] flex items-center justify-between px-6 lg:px-[120px] py-4",
     "bg-neutral-50",
     isLanding
-      ? "bg-neutral-50/60 rounded-full shadow-[0_1px_3.5px_#e8e3e6,0_2px_7px_rgba(32,29,31,0.13)]"
+      ? "lg:bg-neutral-50/60 lg:rounded-full lg:shadow-[0_1px_3.5px_#e8e3e6,0_2px_7px_rgba(32,29,31,0.13)] shadow-[0_1px_0.875px_#e8e3e6]"
       : "shadow-[0_1px_0.875px_#e8e3e6]",
     className,
   ].join(" ");
 
   return (
     <nav className={containerClasses}>
-      {/* 왼쪽: 로고 + 탭 */}
-      <div className="flex items-center gap-8 flex-1">
-        <Link href="/">{logo ?? <MuseLogo />}</Link>
-        <div className="flex items-center gap-2">
-          {tabs.map((tab) => (
-            <GNBTabButton
-              key={tab.value}
-              label={tab.label}
-              size="large"
-              active={activeTab === tab.value}
-              badge={tab.badge}
-              onClick={() => onTabClick?.(tab.value)}
-            />
-          ))}
-        </div>
+      {/* 로고 */}
+      <Link href="/" className="shrink-0">{logo ?? <MuseLogo />}</Link>
+
+      {/* 탭 (가운데) */}
+      <div className="flex items-center gap-1 lg:gap-2">
+        {tabs.map((tab) => (
+          <GNBTabButton
+            key={tab.value}
+            label={tab.label}
+            size="large"
+            active={activeTab === tab.value}
+            badge={tab.badge}
+            onClick={() => onTabClick?.(tab.value)}
+            className={tab.value === "pricing" ? "hidden lg:inline-flex" : ""}
+          />
+        ))}
       </div>
 
       {/* 오른쪽 */}
@@ -126,7 +127,7 @@ export function GNB({
           >
             <BellIcon />
             {notificationCount > 0 && (
-              <span className="flex items-center gap-1 bg-neutral-100 rounded-[4px] px-1.5 py-0.5">
+              <span className="flex items-center gap-1 bg-neutral-100 rounded-sm px-1.5 py-0.5">
                 <svg width="18" height="18" viewBox="0 0 18 18" fill="none" className="shrink-0">
                   <path
                     d="M13.5 6A4.5 4.5 0 1 0 4.5 6c0 5.25-2.25 6.75-2.25 6.75h13.5S13.5 11.25 13.5 6ZM10.3 15.75a1.5 1.5 0 0 1-2.6 0"
@@ -143,7 +144,8 @@ export function GNB({
             )}
           </button>
           <button type="button" onClick={onAvatarClick} className="cursor-pointer">
-            <Avatar name={userName} size="lg" />
+            <span className="hidden lg:block"><Avatar name={userName} size="lg" /></span>
+            <span className="block lg:hidden"><Avatar name={userName} size="md" /></span>
           </button>
         </div>
       ) : (

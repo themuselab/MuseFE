@@ -80,8 +80,8 @@ export function Dropdown({
         className={[
           "w-full flex items-center justify-between bg-neutral-50 border border-neutral-200 cursor-pointer transition-colors",
           isLarge
-            ? "rounded-[12px] px-4 py-2.5"
-            : "rounded-lg px-4 py-2.5 justify-center",
+            ? "rounded-sm px-4 py-2.5"
+            : "rounded-sm px-4 py-2.5 justify-center",
           "text-[14px] font-medium leading-[1.14]",
           selectedItem ? "text-neutral-700" : "text-neutral-500",
         ].join(" ")}
@@ -97,7 +97,7 @@ export function Dropdown({
         <div
           className={[
             "absolute top-full left-0 w-full z-50 border border-neutral-200 bg-neutral-50 overflow-y-auto",
-            isLarge ? "rounded-[12px] mt-1 max-h-70" : "rounded-lg mt-1 max-h-50",
+            isLarge ? "rounded-sm mt-1 max-h-70" : "rounded-sm mt-1 max-h-50",
           ].join(" ")}
         >
           {items.map((item) => {
@@ -115,7 +115,7 @@ export function Dropdown({
                     setOpen(false);
                   }}
                   className={[
-                    "w-full cursor-pointer transition-colors rounded-lg",
+                    "w-full cursor-pointer transition-colors rounded-sm",
                     "text-[14px] font-medium leading-[1.14]",
                     isLarge
                       ? "px-3 py-1.5 text-left"
