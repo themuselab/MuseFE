@@ -38,6 +38,70 @@ export const INDUSTRY_MAIN_OPTIONS = [
   { label: "농림어업", value: "agriculture_forestry_fishery" },
 ] as const;
 
+export type AgreementSection = {
+  title: string;
+  items: { text: string; muted?: boolean }[];
+};
+
+export type AgreementContent = {
+  heading: string;
+  sections: AgreementSection[];
+  footer: string;
+};
+
+export const PRE_REGISTRATION_PRIVACY_AGREEMENT: AgreementContent = {
+  heading: "개인정보 수집 및 이용 동의",
+  sections: [
+    {
+      title: "수집 목적",
+      items: [{ text: "Muse 서비스 정식 출시 알림 및 이벤트 정보 제공" }],
+    },
+    {
+      title: "수집 항목",
+      items: [
+        { text: "이메일 주소 (필수)" },
+        { text: "휴대전화 번호 (선택)" },
+      ],
+    },
+    {
+      title: "보유 기간",
+      items: [{ text: "서비스 출시 알림 발송 완료 후 6개월 이내 파기" }],
+    },
+  ],
+  footer:
+    "위 동의를 거부할 수 있으며, 거부 시 사전 예약 알림 수신이 제한됩니다.",
+};
+
+export const PRE_REGISTRATION_MARKETING_AGREEMENT: AgreementContent = {
+  heading: "마케팅 정보 수신 동의",
+  sections: [
+    {
+      title: "수집 및 이용 목적",
+      items: [
+        { text: "Muse 서비스 정식 출시 알림 발송" },
+        { text: "신규 기능 안내 및 맞춤형 마케팅 · 프로모션 정보 제공" },
+        { text: "이벤트 참여 기회 및 혜택 안내" },
+      ],
+    },
+    {
+      title: "수집 항목",
+      items: [
+        { text: "이메일 주소 (필수)" },
+        { text: "휴대전화 번호 (선택)" },
+      ],
+    },
+    {
+      title: "보유 및 이용 기간",
+      items: [
+        { text: "수집 시점으로부터 서비스 출시 알림 발송 완료 후 6개월까지" },
+        { text: "(단, 수신 동의 철회 요청 시 즉시 파기)", muted: true },
+      ],
+    },
+  ],
+  footer:
+    "마케팅 활용 동의를 거부할 수 있습니다. 단, 거부 시 사전 예약 혜택 안내 및 출시 알림 수신이 제한될 수 있습니다.",
+};
+
 export const BUSINESS_DURATION_OPTIONS = [
   { label: "1년 미만", value: "under_1y" },
   { label: "1년 이상~3년 미만", value: "1y_to_3y" },
