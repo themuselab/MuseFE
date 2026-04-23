@@ -166,7 +166,7 @@ export function LandingFooter() {
         {/* 하단 구분선 + 저작권 */}
         <div className="flex flex-col gap-3">
           <div className="h-px bg-neutral-700 w-full" />
-          <p className="text-caption-m text-neutral-700">
+          <p className="text-caption-m text-neutral-700 text-center">
             © 2026 Muse Lab. All rights reserved.
           </p>
         </div>

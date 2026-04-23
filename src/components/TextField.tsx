@@ -81,7 +81,6 @@ export function TextField({
             isFloating
               ? "-top-1.75 bg-neutral-50 px-0.5"
               : "top-1/2 -translate-y-1/2 bg-transparent",
-            isDisabled && isFloating && "bg-neutral-300",
           ]
             .filter(Boolean)
             .join(" ")}

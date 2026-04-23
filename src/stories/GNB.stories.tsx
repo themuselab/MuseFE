@@ -40,7 +40,8 @@ export const LoginState: Story = {
     state: "login",
     activeTab: "catalog",
     userName: "Muse",
-    notificationCount: 300,
+    creditBalance: 300,
+    hasUnreadNotifications: true,
   },
 };
 
@@ -59,7 +60,7 @@ export const AllStates: Story = {
   render: () => (
     <div className="flex flex-col gap-4 bg-neutral-200 p-4">
       <GNB state="logout" activeTab="catalog" />
-      <GNB state="login" activeTab="catalog" userName="Muse" notificationCount={300} />
+      <GNB state="login" activeTab="catalog" userName="Muse" creditBalance={300} hasUnreadNotifications />
       <GNB state="landing" />
     </div>
   ),

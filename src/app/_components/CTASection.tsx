@@ -77,7 +77,7 @@ export function CTASection() {
                 placeholder="이메일 주소를 입력하세요"
                 className="flex-1 h-[60px] px-[30px] py-4 rounded-full bg-neutral-100/15 border border-neutral-300 text-body-l text-neutral-300 placeholder:text-neutral-300 text-center outline-none focus:border-neutral-50 transition-colors max-md:w-full"
               />
-              <Button hierarchy="secondary" size="large">
+              <Button hierarchy="secondary" size="large" className="shrink-0 whitespace-nowrap">
                 알림 받기
               </Button>
             </div>

@@ -24,9 +24,9 @@ function ImagePlaceholder({ label }: { label: string }) {
 
 function ModelCardPlaceholder() {
   return (
-    <div className="w-[130px] h-[180px] rounded bg-neutral-200 flex flex-col items-center justify-center gap-2 shrink-0">
-      <div className="w-[80px] h-[100px] rounded-t-[371px] bg-neutral-300" />
-      <span className="text-caption-s text-neutral-400">모델</span>
+    <div className="w-[66px] h-[91px] rounded bg-neutral-200 flex flex-col items-center justify-center gap-1 shrink-0">
+      <div className="w-[40px] h-[50px] rounded-t-[371px] bg-neutral-300" />
+      <span className="text-[8px] font-medium text-neutral-400">모델</span>
     </div>
   );
 }

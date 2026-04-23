@@ -20,7 +20,8 @@ type GNBProps = {
   onTabClick?: (tab: string) => void;
   onLoginClick?: () => void;
   userName?: string;
-  notificationCount?: number;
+  creditBalance?: number;
+  hasUnreadNotifications?: boolean;
   onNotificationClick?: () => void;
   onAvatarClick?: () => void;
   logo?: ReactNode;
@@ -31,7 +32,6 @@ const DEFAULT_TABS: GNBTab[] = [
   { label: "모델 카탈로그", value: "catalog" },
   { label: "생성하기", value: "create" },
   { label: "히스토리", value: "history" },
-  { label: "요금제", value: "pricing" },
 ];
 
 function BellIcon() {
@@ -43,6 +43,20 @@ function BellIcon() {
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function CoinIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" className="shrink-0">
+      <ellipse cx="9" cy="7.5" rx="6" ry="2.25" stroke="#92878C" strokeWidth="1.2" />
+      <path
+        d="M3 7.5v3c0 1.24 2.69 2.25 6 2.25s6-1.01 6-2.25v-3"
+        stroke="#92878C"
+        strokeWidth="1.2"
+        strokeLinecap="round"
       />
     </svg>
   );
@@ -80,7 +94,8 @@ export function GNB({
   onTabClick,
   onLoginClick,
   userName = "M",
-  notificationCount = 0,
+  creditBalance,
+  hasUnreadNotifications = false,
   onNotificationClick,
   onAvatarClick,
   logo,
@@ -112,38 +127,36 @@ export function GNB({
             active={activeTab === tab.value}
             badge={tab.badge}
             onClick={() => onTabClick?.(tab.value)}
-            className={tab.value === "pricing" ? "hidden lg:inline-flex" : ""}
           />
         ))}
       </div>
 
       {/* 오른쪽 */}
       {state === "login" ? (
-        <div className="flex items-center gap-5">
+        <div className="flex items-center gap-3 lg:gap-4">
           <button
             type="button"
             onClick={onNotificationClick}
-            className="flex items-center gap-1 cursor-pointer"
+            className="relative cursor-pointer p-1"
+            aria-label="알림"
           >
             <BellIcon />
-            {notificationCount > 0 && (
-              <span className="flex items-center gap-1 bg-neutral-100 rounded-sm px-1.5 py-0.5">
-                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" className="shrink-0">
-                  <path
-                    d="M13.5 6A4.5 4.5 0 1 0 4.5 6c0 5.25-2.25 6.75-2.25 6.75h13.5S13.5 11.25 13.5 6ZM10.3 15.75a1.5 1.5 0 0 1-2.6 0"
-                    stroke="#B6AFB3"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-                <span className="text-[16px] font-medium leading-[1.75] text-neutral-500">
-                  {notificationCount}
-                </span>
-              </span>
+            {hasUnreadNotifications && (
+              <span className="absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-pink-400" />
             )}
           </button>
-          <button type="button" onClick={onAvatarClick} className="cursor-pointer">
+          {creditBalance !== undefined && (
+            <div
+              className="flex items-center gap-1 bg-neutral-100 rounded-sm px-1.5 py-0.5 select-none"
+              aria-label={`보유 크레딧 ${creditBalance}`}
+            >
+              <CoinIcon />
+              <span className="text-body-l text-neutral-500">
+                {creditBalance}
+              </span>
+            </div>
+          )}
+          <button type="button" onClick={onAvatarClick} className="cursor-pointer" aria-label="프로필">
             <span className="hidden lg:block"><Avatar name={userName} size="lg" /></span>
             <span className="block lg:hidden"><Avatar name={userName} size="md" /></span>
           </button>

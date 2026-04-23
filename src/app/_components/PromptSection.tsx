@@ -37,11 +37,13 @@ function SmokeReveal({
 }) {
   return (
     <div
-      className="transition-all duration-[800ms] ease-out"
+      className="transition-all duration-[1400ms] ease-out will-change-transform"
       style={{
         opacity: inView ? 1 : 0,
-        transform: inView ? "translateY(0)" : "translateY(30px)",
-        filter: inView ? "blur(0px)" : "blur(4px)",
+        transform: inView
+          ? "translateY(0) scale(1)"
+          : "translateY(60px) scale(0.96)",
+        filter: inView ? "blur(0px)" : "blur(12px)",
         transitionDelay: `${delay}ms`,
       }}
     >
@@ -88,7 +90,7 @@ export function PromptSection() {
         </div>
 
         {/* 프롬프트 UI 카드 */}
-        <SmokeReveal inView={inView} delay={300}>
+        <SmokeReveal inView={inView} delay={500}>
           <div
             className="w-full max-w-[994px] rounded-2xl p-px"
             style={{

@@ -44,11 +44,11 @@ export function HeroSection() {
             </div>
 
             {/* CTA 버튼 */}
-            <div className="flex items-center gap-3">
-              <Button hierarchy="accent" size="large">
+            <div className="flex items-center gap-3 flex-wrap">
+              <Button hierarchy="accent" size="large" className="shrink-0 whitespace-nowrap">
                 지금 바로 광고 생성하기
               </Button>
-              <Button hierarchy="secondary" size="large">
+              <Button hierarchy="secondary" size="large" className="shrink-0 whitespace-nowrap">
                 모델 카탈로그 보기
               </Button>
             </div>
