@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { authApi } from "@/api/auth";
+import { usersApi } from "@/api/users";
 import { getAccessToken } from "@/lib/fetchClient";
 
 export const useCurrentUser = () => {
@@ -11,7 +11,7 @@ export const useCurrentUser = () => {
     queryKey: ["currentUser", hasToken],
     queryFn: async () => {
       if (!hasToken) return null;
-      const result = await authApi.me();
+      const result = await usersApi.me();
       if (result.success) return result.data;
       return null;
     },

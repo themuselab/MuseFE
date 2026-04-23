@@ -1,5 +1,5 @@
 import { fetchClient } from "@/lib/fetchClient";
-import type { LoginResponse, SignupRequest, GoogleSignupRequest, UserProfile } from "@/types/auth";
+import type { LoginResponse, SignupRequest, GoogleSignupRequest, AuthUser } from "@/types/auth";
 
 export const authApi = {
   login: (data: { email: string; password: string }) =>
@@ -45,5 +45,5 @@ export const authApi = {
       body: JSON.stringify({ email }),
     }),
 
-  me: () => fetchClient<UserProfile>("/auth/me"),
+  me: () => fetchClient<AuthUser>("/auth/me"),
 };

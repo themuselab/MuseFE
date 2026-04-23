@@ -30,8 +30,7 @@ export function NotificationTab({
       role={onClick ? "button" : undefined}
       onClick={onClick}
       className={[
-        "w-[314px] flex flex-col gap-2 pt-3 pr-7 pb-4 pl-5",
-        read ? "bg-neutral-50" : "bg-neutral-100",
+        "w-[314px] flex flex-col gap-2 pt-3 pr-7 pb-4 pl-5 transition-colors bg-transparent hover:bg-neutral-100",
         onClick ? "cursor-pointer" : "",
         className,
       ]
