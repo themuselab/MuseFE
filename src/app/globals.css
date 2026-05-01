@@ -1,8 +1,13 @@
+@import url("https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700&family=Nanum+Myeongjo:wght@400;700&family=Nanum+Pen+Script&display=swap");
 @import "tailwindcss";
 
 @theme {
   /* ── Font tokens ── */
   --font-sans: var(--font-pretendard), "Pretendard", system-ui, sans-serif;
+  --font-pretendard: var(--font-pretendard), "Pretendard", system-ui, sans-serif;
+  --font-nanum-myeongjo: "Nanum Myeongjo", serif;
+  --font-nanum-gothic: "Nanum Gothic", sans-serif;
+  --font-nanum-pen: "Nanum Pen Script", cursive;
 
   /* ── Brand: Pink ── */
   --color-pink-50: #FFF2F7;
@@ -90,6 +95,11 @@
 
   /* ── Single tokens ── */
   --color-white: #FFFFFF;
+
+  /* ── Spacing ── */
+  --spacing-card-label-gap: 11px;
+  --spacing-upload-card-sm: 250px;
+  --spacing-upload-card-lg: 350px;
 
   /* ── Gradients ── */
   --gradient-soft: linear-gradient(135deg, #FFD1E3 0%, #DFBAE3 100%);
@@ -211,6 +221,22 @@
   letter-spacing: 0.003em;
 }
 
+/* ── Input ── */
+
+@utility text-input-l {
+  font-size: 1rem;
+  line-height: 1.5;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+
+@utility text-input-s {
+  font-size: 0.875rem;
+  line-height: 1.4286;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+
 /* ── Caption ── */
 
 @utility text-caption-m {
@@ -234,6 +260,16 @@
   line-height: 1.45;
   font-weight: 600;
   letter-spacing: 0.08em;
+}
+
+/* ── Shadows ── */
+
+@utility shadow-card-hover {
+  box-shadow: 0 1px 7px 0 #201d1f21;
+}
+
+@utility shadow-card-selected {
+  box-shadow: 1px 2px 7px 2px #f3498d21, 0 1px 1.75px 0 #00000021;
 }
 
 @layer base {

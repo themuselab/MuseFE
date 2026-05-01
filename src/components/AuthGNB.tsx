@@ -41,7 +41,7 @@ const DUMMY_CREDITS = 200;
 
 const TABS = [
   { label: "모델 카탈로그", value: "catalog", path: "/catalog" },
-  { label: "생성하기", value: "create", path: "/create" },
+  { label: "생성하기", value: "create", path: "/generate" },
   { label: "히스토리", value: "history", path: "/history" },
 ] as const;
 
