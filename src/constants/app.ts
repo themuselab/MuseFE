@@ -109,3 +109,15 @@ export const BUSINESS_DURATION_OPTIONS = [
   { label: "5년 이상~10년 미만", value: "5y_to_10y" },
   { label: "10년 이상", value: "over_10y" },
 ] as const;
+
+// 광고 생성 도메인에서 industry 코드 → 한국어 라벨 변환에 사용
+export const industryLabelOf = (code: string): string => {
+  return INDUSTRY_MAIN_OPTIONS.find((o) => o.value === code)?.label ?? code;
+};
+
+// 광고 생성 플로우 sessionStorage 키
+export const AD_CREATE_KEYS = {
+  flow: (modelId: string) => `ad-create-flow:${modelId}`,
+  product: (modelId: string) => `ad-create-product:${modelId}`,
+  job: (modelId: string) => `ad-create-job:${modelId}`,
+} as const;

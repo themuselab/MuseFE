@@ -3,7 +3,10 @@
 import { AuthGNB } from "@/components/AuthGNB";
 import { ScrollIndicator } from "@/components/ScrollIndicator";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { useCatalogModels } from "@/hooks/useCatalogModels";
+import { useTopCatalogModels } from "@/hooks/useTopCatalogModels";
 import { INDUSTRY_MAIN_OPTIONS } from "@/constants/app";
+import { useMemo } from "react";
 import { TopRankingSection } from "./_components/TopRankingSection";
 import { ModelFilterBar } from "./_components/ModelFilterBar";
 import { ModelStatsBar } from "./_components/ModelStatsBar";
@@ -12,7 +15,21 @@ import { FilterModal } from "./_components/FilterModal";
 import { ModelDetailModal } from "./_components/ModelDetailModal";
 import { useGenerateFilters } from "./_hooks/useGenerateFilters";
 import { useModelDetail } from "./_hooks/useModelDetail";
-import { ALL_MODELS } from "./_data";
+import type { Model } from "./_types";
+import type { CatalogModelDto, CatalogTopModelDto } from "@/types/ad";
+
+const dtoToModel = (dto: CatalogModelDto | CatalogTopModelDto): Model => ({
+  id: dto.id,
+  name: dto.name,
+  age: dto.age,
+  gender: dto.gender,
+  tags: dto.tags,
+  imageUrl: dto.imageUrl,
+  imageUrls: dto.imageUrls,
+  scores: dto.scores,
+  recommendedIndustries: dto.recommendedIndustries,
+  ...("rank" in dto && typeof dto.rank === "number" ? { rank: dto.rank } : {}),
+});
 
 export default function GeneratePage() {
   const { data: user } = useCurrentUser();
@@ -36,6 +53,26 @@ export default function GeneratePage() {
     closeModal,
   } = useGenerateFilters();
 
+  const catalogQuery = useCatalogModels({
+    gender: filters.gender,
+    age: filters.age,
+    primaryLabel: filters.impression,
+    keyword,
+  });
+
+  const topQuery = useTopCatalogModels();
+
+  const allModels: Model[] = useMemo(
+    () => (catalogQuery.data?.items ?? []).map(dtoToModel),
+    [catalogQuery.data],
+  );
+  const topModels: Model[] = useMemo(
+    () => (topQuery.data?.items ?? []).map(dtoToModel),
+    [topQuery.data],
+  );
+
+  const total = catalogQuery.data?.total ?? allModels.length;
+
   const {
     selected: selectedModel,
     open: detailOpen,
@@ -50,6 +87,7 @@ export default function GeneratePage() {
       <main className="flex-1 flex flex-col gap-5 px-6 md:px-30 pb-20 max-w-[1440px] w-full mx-auto pt-8 md:pt-10">
         <TopRankingSection
           categoryLabel={industryLabel}
+          models={topModels}
           onModelClick={openDetail}
         />
 
@@ -61,13 +99,9 @@ export default function GeneratePage() {
           onFilterOpen={openModal}
         />
 
-        <ModelStatsBar
-          total={ALL_MODELS.length}
-          sort={sort}
-          onSortChange={setSort}
-        />
+        <ModelStatsBar total={total} sort={sort} onSortChange={setSort} />
 
-        <ModelGrid models={ALL_MODELS} onModelClick={openDetail} />
+        <ModelGrid models={allModels} onModelClick={openDetail} />
       </main>
 
       <div className="hidden md:block fixed top-1/2 right-3 -translate-y-1/2 pointer-events-none">
@@ -83,7 +117,7 @@ export default function GeneratePage() {
       <FilterModal
         open={modalOpen}
         filters={filters}
-        matchCount={0}
+        matchCount={total}
         onClose={closeModal}
         onGenderChange={setGender}
         onAgeChange={setAge}

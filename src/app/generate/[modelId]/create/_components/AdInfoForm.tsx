@@ -7,13 +7,15 @@ import { INDUSTRY_MAIN_OPTIONS } from "@/constants/app";
 import { MoodSection } from "./MoodSection";
 import type { AdInfoFormState, MoodSectionState } from "../_types";
 
+import type { Mood } from "../_types";
+
 type AdInfoFormProps = {
   form: AdInfoFormState;
   moodState: MoodSectionState;
   onIndustryChange: (value: string) => void;
   onItemNameChange: (value: string) => void;
   onDescriptionChange: (value: string) => void;
-  onSelectMood: (id: string) => void;
+  onSelectMood: (mood: Mood) => void;
 };
 
 const ITEM_NAME_MAX = 30;
@@ -87,7 +89,7 @@ export function AdInfoForm({
       <MoodSection
         state={moodState}
         itemName={form.itemName}
-        selectedMoodId={form.selectedMoodId}
+        selectedMoodId={form.selectedMood?.id ?? null}
         onSelectMood={onSelectMood}
       />
     </div>

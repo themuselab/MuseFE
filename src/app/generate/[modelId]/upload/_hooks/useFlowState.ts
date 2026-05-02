@@ -9,11 +9,22 @@ const FLOW_KEY_PREFIX = "ad-create-flow:";
 function isAdInfoFormState(value: unknown): value is AdInfoFormState {
   if (typeof value !== "object" || value === null) return false;
   const obj = value as Record<string, unknown>;
+  if (
+    typeof obj.industry !== "string" ||
+    typeof obj.itemName !== "string" ||
+    typeof obj.description !== "string"
+  ) {
+    return false;
+  }
+  if (obj.selectedMood === null) return true;
+  if (typeof obj.selectedMood !== "object" || obj.selectedMood === null) {
+    return false;
+  }
+  const mood = obj.selectedMood as Record<string, unknown>;
   return (
-    typeof obj.industry === "string" &&
-    typeof obj.itemName === "string" &&
-    typeof obj.description === "string" &&
-    (obj.selectedMoodId === null || typeof obj.selectedMoodId === "string")
+    typeof mood.id === "string" &&
+    typeof mood.label === "string" &&
+    typeof mood.subtitle === "string"
   );
 }
 

@@ -2,13 +2,11 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { AD_CREATE_KEYS } from "@/constants/app";
 import type { AdInfoFormState } from "../../create/_types";
 
-const FLOW_KEY_PREFIX = "ad-create-flow:";
-const PRODUCT_KEY_PREFIX = "ad-create-product:";
-
 export type AdCreateProductPayload = {
-  productImageUrl: string | null;
+  productImagePath: string;
 };
 
 export type GenerationContext = {
@@ -19,18 +17,29 @@ export type GenerationContext = {
 function isAdInfoFormState(value: unknown): value is AdInfoFormState {
   if (typeof value !== "object" || value === null) return false;
   const obj = value as Record<string, unknown>;
+  if (
+    typeof obj.industry !== "string" ||
+    typeof obj.itemName !== "string" ||
+    typeof obj.description !== "string"
+  ) {
+    return false;
+  }
+  if (obj.selectedMood === null) return true;
+  if (typeof obj.selectedMood !== "object" || obj.selectedMood === null) {
+    return false;
+  }
+  const mood = obj.selectedMood as Record<string, unknown>;
   return (
-    typeof obj.industry === "string" &&
-    typeof obj.itemName === "string" &&
-    typeof obj.description === "string" &&
-    (obj.selectedMoodId === null || typeof obj.selectedMoodId === "string")
+    typeof mood.id === "string" &&
+    typeof mood.label === "string" &&
+    typeof mood.subtitle === "string"
   );
 }
 
 function isProductPayload(value: unknown): value is AdCreateProductPayload {
   if (typeof value !== "object" || value === null) return false;
   const obj = value as Record<string, unknown>;
-  return obj.productImageUrl === null || typeof obj.productImageUrl === "string";
+  return typeof obj.productImagePath === "string" && obj.productImagePath.length > 0;
 }
 
 function safeParse<T>(raw: string | null, guard: (value: unknown) => value is T): T | null {
@@ -49,11 +58,11 @@ export function useGenerationContext(modelId: string): GenerationContext | null 
 
   useEffect(() => {
     const flow = safeParse(
-      sessionStorage.getItem(`${FLOW_KEY_PREFIX}${modelId}`),
+      sessionStorage.getItem(AD_CREATE_KEYS.flow(modelId)),
       isAdInfoFormState,
     );
     const product = safeParse(
-      sessionStorage.getItem(`${PRODUCT_KEY_PREFIX}${modelId}`),
+      sessionStorage.getItem(AD_CREATE_KEYS.product(modelId)),
       isProductPayload,
     );
 

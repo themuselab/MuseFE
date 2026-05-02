@@ -1,9 +1,12 @@
 "use client";
 
 import { notFound, useParams, useRouter } from "next/navigation";
+import { useMemo } from "react";
 import { ImageUploadCard } from "@/components/ImageUploadCard";
-import { ALL_MODELS, TOP_5_MODELS } from "../../_data";
+import { useCatalogModels } from "@/hooks/useCatalogModels";
+import { AD_CREATE_KEYS } from "@/constants/app";
 import type { Model } from "../../_types";
+import type { CatalogModelDto } from "@/types/ad";
 import { CreateFlowGNB } from "../create/_components/CreateFlowGNB";
 import { CreateFooter } from "../create/_components/CreateFooter";
 import { SelectedModelCard } from "../create/_components/SelectedModelCard";
@@ -11,42 +14,60 @@ import { UploadHeader } from "./_components/UploadHeader";
 import { useFlowState } from "./_hooks/useFlowState";
 import { useProductImageUpload } from "./_hooks/useProductImageUpload";
 
-function findModel(modelId: string): Model | null {
-  const all = [...TOP_5_MODELS, ...ALL_MODELS];
-  return all.find((m) => m.id === modelId) ?? null;
-}
+const dtoToModel = (dto: CatalogModelDto): Model => ({
+  id: dto.id,
+  name: dto.name,
+  age: dto.age,
+  gender: dto.gender,
+  tags: dto.tags,
+  imageUrl: dto.imageUrl,
+  imageUrls: dto.imageUrls,
+  scores: dto.scores,
+  recommendedIndustries: dto.recommendedIndustries,
+});
 
 export default function ProductUploadPage() {
   const params = useParams<{ modelId: string }>();
   const router = useRouter();
-  const model = findModel(params.modelId);
+  const catalogQuery = useCatalogModels();
 
+  const model: Model | null = useMemo(() => {
+    const dto = catalogQuery.data?.items.find((m) => m.id === params.modelId);
+    return dto ? dtoToModel(dto) : null;
+  }, [catalogQuery.data, params.modelId]);
+
+  const flowState = useFlowState(params.modelId);
+  const { status, onSelectFile } = useProductImageUpload();
+
+  if (catalogQuery.isLoading) return null;
   if (!model) {
     notFound();
   }
-
-  const flowState = useFlowState(model.id);
-  const { status, onSelectFile } = useProductImageUpload();
-
   if (!flowState) return null;
 
   const isLoading = status.kind === "loading";
-  const productImageUrl =
-    status.kind !== "idle" ? status.imageUrl : null;
+  const previewUrl = status.kind !== "idle" ? status.previewUrl : null;
+  const productImagePath =
+    status.kind === "done" ? status.productImagePath : null;
+
+  const errorMessage = status.kind === "error" ? status.message : null;
 
   const handleNext = () => {
+    if (!productImagePath) return;
     sessionStorage.setItem(
-      `ad-create-product:${model.id}`,
-      JSON.stringify({
-        productImageUrl: status.kind === "done" ? status.imageUrl : null,
-      }),
+      AD_CREATE_KEYS.product(model.id),
+      JSON.stringify({ productImagePath }),
     );
     router.push(`/generate/${model.id}/generating`);
   };
 
   return (
     <div className="min-h-screen flex flex-col bg-neutral-50">
-      <CreateFlowGNB currentStep={2} completedSteps={[1, 2]} onBack={() => router.back()} />
+      <CreateFlowGNB
+        currentStep={2}
+        completedSteps={[1, 2]}
+        onBack={() => router.back()}
+      />
 
       <main className="flex-1 max-w-[1440px] w-full mx-auto px-6 lg:px-30 py-8 lg:py-15 pb-30 flex flex-col lg:flex-row gap-10">
         <SelectedModelCard model={model} />
@@ -54,15 +75,21 @@ export default function ProductUploadPage() {
           <UploadHeader />
           <ImageUploadCard
             size="sm"
-            imageUrl={productImageUrl}
+            imageUrl={previewUrl}
             loading={isLoading}
             onSelectFile={onSelectFile}
             className="w-full"
           />
+          {errorMessage ? (
+            <p className="text-caption-m text-error-500">{errorMessage}</p>
+          ) : null}
         </div>
       </main>
 
-      <CreateFooter canSubmit={!isLoading} onSubmit={handleNext} />
+      <CreateFooter
+        canSubmit={Boolean(productImagePath) && !isLoading}
+        onSubmit={handleNext}
+      />
     </div>
   );
 }

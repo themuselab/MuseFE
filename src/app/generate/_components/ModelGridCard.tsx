@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { RankingCard } from "@/components/RankingCard";
 import type { Model } from "../_types";
 
@@ -21,7 +22,17 @@ export function ModelGridCard({
           alt={model.name}
         />
       ) : (
-        <div className="relative w-full aspect-3/4 rounded-md bg-neutral-100 overflow-hidden" />
+        <div className="relative w-full aspect-3/4 rounded-md bg-neutral-100 overflow-hidden">
+          {model.imageUrl ? (
+            <Image
+              src={model.imageUrl}
+              alt={model.name}
+              fill
+              className="object-cover"
+              sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
+            />
+          ) : null}
+        </div>
       )}
       <div className="flex flex-col gap-2 pl-2">
         <h3 className="text-heading-s text-neutral-900">{model.name}</h3>

@@ -1,55 +1,60 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { MOOD_PRESETS } from "../_data";
+import { useRecommendMoods } from "@/hooks/useRecommendMoods";
+import { industryLabelOf } from "@/constants/app";
 import type { Mood, MoodSectionState } from "../_types";
 
 const DEBOUNCE_MS = 600;
-const MOCK_FETCH_MS = 1200;
 
 type Args = {
-  industry: string;
+  industry: string; // FE 코드 (예: "fashion_beauty")
   itemName: string;
+  description?: string;
 };
-
-type AsyncResult =
-  | { loading: false; moods: null }
-  | { loading: true }
-  | { loading: false; moods: Mood[] };
-
-const INITIAL: AsyncResult = { loading: false, moods: null };
 
 export function useMoodRecommendation({
   industry,
   itemName,
+  description,
 }: Args): MoodSectionState {
-  const [result, setResult] = useState<AsyncResult>(INITIAL);
+  const [moods, setMoods] = useState<Mood[] | null>(null);
+  const mutation = useRecommendMoods();
   const isInputReady = industry.length > 0 && itemName.length > 0;
 
   useEffect(() => {
-    if (!isInputReady) return;
+    if (!isInputReady) {
+      setMoods(null);
+      return;
+    }
 
     let cancelled = false;
-    let fetchTimer: ReturnType<typeof setTimeout> | null = null;
-
-    const debounceTimer = setTimeout(() => {
+    const debounce = setTimeout(() => {
       if (cancelled) return;
-      setResult({ loading: true });
-      fetchTimer = setTimeout(() => {
-        if (cancelled) return;
-        setResult({ loading: false, moods: MOOD_PRESETS.slice(0, 3) });
-      }, MOCK_FETCH_MS);
+      mutation.mutate(
+        {
+          industry: industryLabelOf(industry),
+          item: itemName,
+          extraDescription: description?.trim() || undefined,
+        },
+        {
+          onSuccess: (data) => {
+            if (!cancelled) setMoods(data.moods);
+          },
+        },
+      );
     }, DEBOUNCE_MS);
 
     return () => {
       cancelled = true;
-      clearTimeout(debounceTimer);
-      if (fetchTimer) clearTimeout(fetchTimer);
+      clearTimeout(debounce);
     };
-  }, [isInputReady, industry, itemName]);
+    // mutation은 ref 안정 — industry/item/desc 변경에만 반응
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isInputReady, industry, itemName, description]);
 
   if (!isInputReady) return { kind: "idle" };
-  if (result.loading) return { kind: "loading" };
-  if (result.moods) return { kind: "result", moods: result.moods };
-  return { kind: "loading" };
+  if (mutation.isPending || (moods === null && isInputReady))
+    return { kind: "loading" };
+  return { kind: "result", moods: moods ?? [] };
 }

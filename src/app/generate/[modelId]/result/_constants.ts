@@ -1,16 +1,5 @@
 import type { FontKey } from "./_types";
 
-export type MockResult = {
-  id: string;
-  src: string;
-  alt: string;
-};
-
-export const MOCK_RESULTS: ReadonlyArray<MockResult> = [
-  { id: "result-1", src: "/images/result/sample-1.svg", alt: "광고 결과 1" },
-  { id: "result-2", src: "/images/result/sample-2.svg", alt: "광고 결과 2" },
-];
-
 export const FONTS: ReadonlyArray<{ key: FontKey; label: string; cssVar: string }> = [
   { key: "pretendard", label: "Pretendard", cssVar: "--font-pretendard" },
   { key: "nanum-myeongjo", label: "나눔명조", cssVar: "--font-nanum-myeongjo" },
@@ -36,5 +25,6 @@ export const COLOR_SWATCHES: ReadonlyArray<string> = [
 
 export const MAX_HISTORY = 50;
 
-export const CANVAS_ASPECT = "396/528";
+// BE 출력이 1024×1536(2:3) 세로형이라 동일 비율 유지
+export const CANVAS_ASPECT = "2/3";
 

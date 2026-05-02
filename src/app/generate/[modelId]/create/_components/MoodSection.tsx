@@ -3,13 +3,13 @@
 import { useEffect, useRef, useState } from "react";
 import { ThreeDots } from "@/components/ThreeDots";
 import { MoodCard } from "./MoodCard";
-import type { MoodSectionState } from "../_types";
+import type { Mood, MoodSectionState } from "../_types";
 
 type MoodSectionProps = {
   state: MoodSectionState;
   itemName: string;
   selectedMoodId: string | null;
-  onSelectMood: (id: string) => void;
+  onSelectMood: (mood: Mood) => void;
 };
 
 function InfoIcon() {
@@ -83,7 +83,7 @@ function ResultState({
   itemName: string;
   selectedMoodId: string | null;
   state: Extract<MoodSectionState, { kind: "result" }>;
-  onSelectMood: (id: string) => void;
+  onSelectMood: (mood: Mood) => void;
 }) {
   return (
     <div className="flex flex-col gap-4">

@@ -1,100 +1,13 @@
-import type { Model, RadarAxis, SortOption } from "./_types";
+import type { RadarAxis, SortOption } from "./_types";
 
 export const RADAR_AXES: { key: RadarAxis; label: string }[] = [
   { key: "trust", label: "신뢰감" },
-  { key: "sophisticated", label: "세련미" },
-  { key: "friendly", label: "친근감" },
-  { key: "stable", label: "안정감" },
-  { key: "cheerful", label: "유쾌함" },
+  { key: "sophisticated", label: "세련됨" },
+  { key: "friendly", label: "친근함" },
+  { key: "comfortable", label: "편안함" },
+  { key: "professional", label: "전문성" },
+  { key: "lively", label: "활발함" },
 ];
-
-const DEFAULT_SCORES = {
-  trust: 80,
-  sophisticated: 65,
-  friendly: 70,
-  stable: 60,
-  cheerful: 75,
-} as const;
-
-const DEFAULT_INDUSTRIES = ["chemistry_bio", "textile_clothing"];
-
-const buildImageUrls = (count: number): string[] =>
-  Array.from({ length: count }, () => "");
-
-export const TOP_5_MODELS: Model[] = [
-  {
-    id: "tm1",
-    rank: 1,
-    name: "홍길동",
-    age: "20대",
-    gender: "여",
-    tags: ["신뢰감", "세련미"],
-    imageUrl: null,
-    imageUrls: buildImageUrls(6),
-    scores: DEFAULT_SCORES,
-    recommendedIndustries: DEFAULT_INDUSTRIES,
-  },
-  {
-    id: "tm2",
-    rank: 2,
-    name: "홍길동",
-    age: "20대",
-    gender: "여",
-    tags: ["신뢰감", "세련미"],
-    imageUrl: null,
-    imageUrls: buildImageUrls(6),
-    scores: DEFAULT_SCORES,
-    recommendedIndustries: DEFAULT_INDUSTRIES,
-  },
-  {
-    id: "tm3",
-    rank: 3,
-    name: "홍길동",
-    age: "20대",
-    gender: "여",
-    tags: ["신뢰감", "세련미"],
-    imageUrl: null,
-    imageUrls: buildImageUrls(6),
-    scores: DEFAULT_SCORES,
-    recommendedIndustries: DEFAULT_INDUSTRIES,
-  },
-  {
-    id: "tm4",
-    rank: 4,
-    name: "홍길동",
-    age: "20대",
-    gender: "여",
-    tags: ["신뢰감", "세련미"],
-    imageUrl: null,
-    imageUrls: buildImageUrls(6),
-    scores: DEFAULT_SCORES,
-    recommendedIndustries: DEFAULT_INDUSTRIES,
-  },
-  {
-    id: "tm5",
-    rank: 5,
-    name: "홍길동",
-    age: "20대",
-    gender: "여",
-    tags: ["신뢰감", "세련미"],
-    imageUrl: null,
-    imageUrls: buildImageUrls(6),
-    scores: DEFAULT_SCORES,
-    recommendedIndustries: DEFAULT_INDUSTRIES,
-  },
-];
-
-export const ALL_MODELS: Model[] = Array.from({ length: 12 }, (_, i) => ({
-  id: `am${i + 1}`,
-  name: "홍길동",
-  age: "20대",
-  gender: "여",
-  tags: ["신뢰감", "세련미"],
-  imageUrl: null,
-  imageUrls: buildImageUrls(6),
-  scores: DEFAULT_SCORES,
-  recommendedIndustries: DEFAULT_INDUSTRIES,
-}));
 
 export const SORT_OPTIONS: { label: string; value: SortOption }[] = [
   { label: "추천순", value: "recommend" },
@@ -104,11 +17,11 @@ export const SORT_OPTIONS: { label: string; value: SortOption }[] = [
 export const IMPRESSION_OPTIONS = [
   { label: "전체", value: "all" },
   { label: "신뢰감", value: "trust" },
-  { label: "친근함", value: "friendly" },
-  { label: "친한형", value: "intimate" },
   { label: "세련됨", value: "sophisticated" },
-  { label: "활달함", value: "lively" },
+  { label: "친근함", value: "friendly" },
   { label: "편안함", value: "comfortable" },
+  { label: "전문성", value: "professional" },
+  { label: "활발함", value: "lively" },
 ] as const;
 
 export const GENDER_OPTIONS = [

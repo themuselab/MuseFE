@@ -1,27 +1,25 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-
-const MOCK_FETCH_MS = 1500;
+import { useUploadProductImage } from "@/hooks/useUploadProductImage";
 
 export type UploadStatus =
   | { kind: "idle" }
-  | { kind: "loading"; imageUrl: string }
-  | { kind: "done"; imageUrl: string };
+  | { kind: "loading"; previewUrl: string }
+  | { kind: "done"; previewUrl: string; productImagePath: string }
+  | { kind: "error"; previewUrl: string; message: string };
 
-export function useProductImageUpload() {
-  const [status, setStatus] = useState<UploadStatus>({ kind: "idle" });
+export function useProductImageUpload(initial?: {
+  productImagePath: string;
+  previewUrl: string;
+}) {
+  const [status, setStatus] = useState<UploadStatus>(
+    initial
+      ? { kind: "done", previewUrl: initial.previewUrl, productImagePath: initial.productImagePath }
+      : { kind: "idle" },
+  );
   const previousUrlRef = useRef<string | null>(null);
-
-  useEffect(() => {
-    if (status.kind === "loading") {
-      const timer = setTimeout(() => {
-        setStatus({ kind: "done", imageUrl: status.imageUrl });
-      }, MOCK_FETCH_MS);
-      return () => clearTimeout(timer);
-    }
-    return undefined;
-  }, [status]);
+  const mutation = useUploadProductImage();
 
   useEffect(() => {
     return () => {
@@ -31,14 +29,34 @@ export function useProductImageUpload() {
     };
   }, []);
 
-  const onSelectFile = useCallback((file: File) => {
-    const url = URL.createObjectURL(file);
-    if (previousUrlRef.current) {
-      URL.revokeObjectURL(previousUrlRef.current);
-    }
-    previousUrlRef.current = url;
-    setStatus({ kind: "loading", imageUrl: url });
-  }, []);
+  const onSelectFile = useCallback(
+    (file: File) => {
+      const url = URL.createObjectURL(file);
+      if (previousUrlRef.current) {
+        URL.revokeObjectURL(previousUrlRef.current);
+      }
+      previousUrlRef.current = url;
+      setStatus({ kind: "loading", previewUrl: url });
+
+      mutation.mutate(file, {
+        onSuccess: (data) => {
+          setStatus({
+            kind: "done",
+            previewUrl: url,
+            productImagePath: data.productImagePath,
+          });
+        },
+        onError: (err) => {
+          setStatus({
+            kind: "error",
+            previewUrl: url,
+            message: err instanceof Error ? err.message : "업로드 실패",
+          });
+        },
+      });
+    },
+    [mutation],
+  );
 
   return { status, onSelectFile };
 }

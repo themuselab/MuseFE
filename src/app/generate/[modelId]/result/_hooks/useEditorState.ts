@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { MAX_HISTORY } from "../_constants";
 import type {
   AlignAxis,
@@ -10,10 +10,32 @@ import type {
   Layer,
   TextLayer,
 } from "../_types";
+import type { TextOverlayDto } from "@/types/ad";
 
 const IMAGE_LAYER_ID = "image-base";
 
-function makeInitialState(imageSrc: string): EditorState {
+const overlayToTextLayer = (overlay: TextOverlayDto, idx: number): TextLayer => ({
+  id: `overlay-${overlay.id}-${idx}`,
+  type: "text",
+  x: overlay.x,
+  y: overlay.y,
+  width: overlay.width,
+  height: overlay.height,
+  rotation: 0,
+  content: overlay.content,
+  fontFamily: "pretendard",
+  fontSize: overlay.fontSize,
+  bold: overlay.fontWeight === "bold",
+  italic: false,
+  underline: false,
+  textAlign: overlay.textAlign,
+  color: overlay.color,
+});
+
+function makeInitialState(
+  imageSrc: string,
+  initialOverlays?: TextOverlayDto[] | null,
+): EditorState {
   const image: ImageLayer = {
     id: IMAGE_LAYER_ID,
     type: "image",
@@ -24,7 +46,8 @@ function makeInitialState(imageSrc: string): EditorState {
     rotation: 0,
     src: imageSrc,
   };
-  return { layers: [image], selectedId: null };
+  const textLayers = (initialOverlays ?? []).map(overlayToTextLayer);
+  return { layers: [image, ...textLayers], selectedId: null };
 }
 
 function makeNewTextLayer(): TextLayer {
@@ -54,11 +77,46 @@ function clone(state: EditorState): EditorState {
   };
 }
 
-export function useEditorState(imageSrc: string) {
-  const [state, setState] = useState<EditorState>(() => makeInitialState(imageSrc));
+export function useEditorState(
+  imageSrc: string,
+  initialOverlays?: TextOverlayDto[] | null,
+) {
+  const [state, setState] = useState<EditorState>(() =>
+    makeInitialState(imageSrc, initialOverlays),
+  );
+  const overlaysAppliedRef = useRef(false);
   const pastRef = useRef<EditorState[]>([]);
   const futureRef = useRef<EditorState[]>([]);
   const [historyVersion, setHistoryVersion] = useState(0);
+
+  // imageSrc가 비동기로 도착(blob URL 등) 시 image 레이어 src 동기화
+  useEffect(() => {
+    if (!imageSrc) return;
+    setState((prev) => {
+      const img = prev.layers.find((l): l is ImageLayer => l.id === IMAGE_LAYER_ID);
+      if (img && img.src === imageSrc) return prev;
+      return {
+        ...prev,
+        layers: prev.layers.map((l) =>
+          l.id === IMAGE_LAYER_ID && l.type === "image" ? { ...l, src: imageSrc } : l,
+        ),
+      };
+    });
+  }, [imageSrc]);
+
+  // initialOverlays가 비동기로 도착했을 때 1회 주입 (첫 마운트 시 비어있고 폴링 응답으로 받는 경우)
+  useEffect(() => {
+    if (overlaysAppliedRef.current) return;
+    if (!initialOverlays || initialOverlays.length === 0) return;
+    setState((prev) => {
+      // 이미 overlay 레이어가 있으면 스킵
+      const hasOverlay = prev.layers.some((l) => l.id.startsWith("overlay-"));
+      if (hasOverlay) return prev;
+      const textLayers = initialOverlays.map(overlayToTextLayer);
+      return { ...prev, layers: [...prev.layers, ...textLayers] };
+    });
+    overlaysAppliedRef.current = true;
+  }, [initialOverlays]);
 
   const commit = useCallback(() => {
     pastRef.current = [...pastRef.current.slice(-(MAX_HISTORY - 1)), clone(state)];

@@ -15,7 +15,9 @@ type ApiErrorResponse = {
 
 type ApiResponse<T> = ApiSuccessResponse<T> | ApiErrorResponse;
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
+export const API_BASE =
+  process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
+const BASE_URL = API_BASE;
 
 let accessToken: string | null = null;
 let isRefreshing = false;
@@ -75,8 +77,12 @@ export const fetchClient = async <T>(
   endpoint: string,
   options?: FetchOptions,
 ): Promise<ApiResponse<T>> => {
+  const isFormData =
+    typeof FormData !== "undefined" && options?.body instanceof FormData;
+
   const headers: Record<string, string> = {
-    "Content-Type": "application/json",
+    // FormData인 경우 Content-Type 직접 설정 금지 — 브라우저가 boundary 포함해 자동 설정
+    ...(isFormData ? {} : { "Content-Type": "application/json" }),
     ...(options?.headers as Record<string, string> | undefined),
   };
 
