@@ -4,8 +4,6 @@ import { useQuery } from "@tanstack/react-query";
 import { catalogModelsApi } from "@/api/catalogModels";
 import type { ListTopCatalogModelsResponse } from "@/types/ad";
 
-const EMPTY: ListTopCatalogModelsResponse = { items: [] };
-
 export const useTopCatalogModels = () => {
   return useQuery({
     queryKey: ["catalogModels", "top"],
@@ -14,6 +12,5 @@ export const useTopCatalogModels = () => {
       if (result.success) return result.data;
       throw new Error(result.error.message);
     },
-    placeholderData: EMPTY,
   });
 };
