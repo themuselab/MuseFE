@@ -1,16 +1,5 @@
 import type { FontKey } from "./_types";
 
-export type MockResult = {
-  id: string;
-  src: string;
-  alt: string;
-};
-
-export const MOCK_RESULTS: ReadonlyArray<MockResult> = [
-  { id: "result-1", src: "/images/result/sample-1.svg", alt: "광고 결과 1" },
-  { id: "result-2", src: "/images/result/sample-2.svg", alt: "광고 결과 2" },
-];
-
 export const FONTS: ReadonlyArray<{ key: FontKey; label: string; cssVar: string }> = [
   { key: "pretendard", label: "Pretendard", cssVar: "--font-pretendard" },
   { key: "nanum-myeongjo", label: "나눔명조", cssVar: "--font-nanum-myeongjo" },

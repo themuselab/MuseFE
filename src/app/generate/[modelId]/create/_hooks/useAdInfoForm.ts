@@ -1,47 +1,47 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import type { AdInfoFormState } from "../_types";
+import type { AdInfoFormState, Mood } from "../_types";
 
 const INITIAL_STATE: AdInfoFormState = {
   industry: "",
   itemName: "",
   description: "",
-  selectedMoodId: null,
+  selectedMood: null,
 };
 
 export function useAdInfoForm() {
   const [form, setForm] = useState<AdInfoFormState>(INITIAL_STATE);
 
   const setIndustry = useCallback((industry: string) => {
-    setForm((prev) => ({ ...prev, industry, selectedMoodId: null }));
+    setForm((prev) => ({ ...prev, industry, selectedMood: null }));
   }, []);
 
   const setItemName = useCallback((itemName: string) => {
-    setForm((prev) => ({ ...prev, itemName, selectedMoodId: null }));
+    setForm((prev) => ({ ...prev, itemName, selectedMood: null }));
   }, []);
 
   const setDescription = useCallback((description: string) => {
     setForm((prev) => ({ ...prev, description }));
   }, []);
 
-  const selectMood = useCallback((id: string) => {
+  const selectMood = useCallback((mood: Mood) => {
     setForm((prev) => ({
       ...prev,
-      selectedMoodId: prev.selectedMoodId === id ? null : id,
+      selectedMood: prev.selectedMood?.id === mood.id ? null : mood,
     }));
   }, []);
 
   const canSubmit =
     form.industry.length > 0 &&
     form.itemName.length > 0 &&
-    form.selectedMoodId !== null;
+    form.selectedMood !== null;
 
   const isDirty =
     form.industry.length > 0 ||
     form.itemName.length > 0 ||
     form.description.length > 0 ||
-    form.selectedMoodId !== null;
+    form.selectedMood !== null;
 
   return {
     form,

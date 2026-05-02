@@ -1,9 +1,11 @@
 "use client";
 
 import { notFound, useParams, useRouter } from "next/navigation";
-import { useCallback } from "react";
-import { ALL_MODELS, TOP_5_MODELS } from "../../_data";
+import { useCallback, useMemo } from "react";
+import { useCatalogModels } from "@/hooks/useCatalogModels";
+import { AD_CREATE_KEYS } from "@/constants/app";
 import type { Model } from "../../_types";
+import type { CatalogModelDto } from "@/types/ad";
 import { AdInfoForm } from "./_components/AdInfoForm";
 import { CreateFlowGNB } from "./_components/CreateFlowGNB";
 import { CreateFooter } from "./_components/CreateFooter";
@@ -13,21 +15,29 @@ import { useAdInfoForm } from "./_hooks/useAdInfoForm";
 import { useLeaveConfirm } from "./_hooks/useLeaveConfirm";
 import { useMoodRecommendation } from "./_hooks/useMoodRecommendation";
 
-function findModel(modelId: string): Model | null {
-  const all = [...TOP_5_MODELS, ...ALL_MODELS];
-  return all.find((m) => m.id === modelId) ?? null;
-}
-
 const DRAFT_KEY_PREFIX = "ad-create-draft:";
+
+const dtoToModel = (dto: CatalogModelDto): Model => ({
+  id: dto.id,
+  name: dto.name,
+  age: dto.age,
+  gender: dto.gender,
+  tags: dto.tags,
+  imageUrl: dto.imageUrl,
+  imageUrls: dto.imageUrls,
+  scores: dto.scores,
+  recommendedIndustries: dto.recommendedIndustries,
+});
 
 export default function CreateAdInfoPage() {
   const params = useParams<{ modelId: string }>();
   const router = useRouter();
-  const model = findModel(params.modelId);
+  const catalogQuery = useCatalogModels();
 
-  if (!model) {
-    notFound();
-  }
+  const model: Model | null = useMemo(() => {
+    const dto = catalogQuery.data?.items.find((m) => m.id === params.modelId);
+    return dto ? dtoToModel(dto) : null;
+  }, [catalogQuery.data, params.modelId]);
 
   const {
     form,
@@ -42,27 +52,30 @@ export default function CreateAdInfoPage() {
   const moodState = useMoodRecommendation({
     industry: form.industry,
     itemName: form.itemName,
+    description: form.description,
   });
 
   const saveDraft = useCallback(() => {
-    if (typeof window === "undefined") return;
+    if (typeof window === "undefined" || !model) return;
     sessionStorage.setItem(
       `${DRAFT_KEY_PREFIX}${model.id}`,
       JSON.stringify({ ...form, savedAt: new Date().toISOString() }),
     );
-  }, [model.id, form]);
+  }, [model, form]);
 
   const leave = useLeaveConfirm({ isDirty, saveDraft });
+
+  if (catalogQuery.isLoading) return null;
+  if (!model) {
+    notFound();
+  }
 
   const handleBack = () => {
     leave.guard(() => router.back());
   };
 
   const handleSubmit = () => {
-    sessionStorage.setItem(
-      `ad-create-flow:${model.id}`,
-      JSON.stringify(form),
-    );
+    sessionStorage.setItem(AD_CREATE_KEYS.flow(model.id), JSON.stringify(form));
     router.push(`/generate/${model.id}/upload`);
   };
 

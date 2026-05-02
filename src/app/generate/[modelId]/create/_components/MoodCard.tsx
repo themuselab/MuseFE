@@ -3,14 +3,14 @@ import type { Mood } from "../_types";
 type MoodCardProps = {
   mood: Mood;
   selected: boolean;
-  onClick: (id: string) => void;
+  onClick: (mood: Mood) => void;
 };
 
 export function MoodCard({ mood, selected, onClick }: MoodCardProps) {
   return (
     <button
       type="button"
-      onClick={() => onClick(mood.id)}
+      onClick={() => onClick(mood)}
       aria-pressed={selected}
       className={`relative w-full flex flex-col gap-3 pt-4 px-3 pb-3 rounded-lg text-left cursor-pointer transition-colors ${
         selected

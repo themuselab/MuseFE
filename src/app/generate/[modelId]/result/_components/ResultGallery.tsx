@@ -1,23 +1,28 @@
-import { MOCK_RESULTS } from "../_constants";
 import { ResultCard } from "./ResultCard";
 
 type ResultGalleryProps = {
+  src: string;
+  alt: string;
   onEditText: () => void;
   editedSecondSrc?: string | null;
 };
 
-export function ResultGallery({ onEditText, editedSecondSrc }: ResultGalleryProps) {
+// 같은 이미지를 2번 표시: 1번 원본, 2번 편집 가능
+export function ResultGallery({
+  src,
+  alt,
+  onEditText,
+  editedSecondSrc,
+}: ResultGalleryProps) {
   return (
     <div className="flex flex-col sm:flex-row gap-6 lg:gap-10 items-center justify-center">
-      {MOCK_RESULTS.map((r, i) => (
-        <ResultCard
-          key={r.id}
-          src={i === 1 && editedSecondSrc ? editedSecondSrc : r.src}
-          alt={r.alt}
-          showEditOverlay={i === 1}
-          onEdit={onEditText}
-        />
-      ))}
+      <ResultCard src={src} alt={alt} showEditOverlay={false} />
+      <ResultCard
+        src={editedSecondSrc ?? src}
+        alt={`${alt} (편집)`}
+        showEditOverlay
+        onEdit={onEditText}
+      />
     </div>
   );
 }

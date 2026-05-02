@@ -9,7 +9,7 @@ export type AdInfoFormState = {
   industry: string;
   itemName: string;
   description: string;
-  selectedMoodId: string | null;
+  selectedMood: Mood | null;
 };
 
 export type MoodSectionState =

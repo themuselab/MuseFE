@@ -37,7 +37,7 @@ export function ResultCard({
 }: ResultCardProps) {
   return (
     <div className="relative w-full max-w-[396px] aspect-[396/528] rounded-xl overflow-hidden border border-neutral-200 bg-neutral-100">
-      {src.startsWith("data:") ? (
+      {src.startsWith("data:") || src.startsWith("blob:") ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img src={src} alt={alt} className="absolute inset-0 w-full h-full object-cover" />
       ) : (
