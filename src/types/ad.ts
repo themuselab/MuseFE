@@ -93,12 +93,26 @@ export type GenerateAdResponse = {
 
 export type JobStatus = "queued" | "processing" | "completed" | "failed";
 
+export type TextOverlayDto = {
+  id: string;
+  content: string;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  fontSize: number;
+  fontWeight: "normal" | "bold";
+  color: string;
+  textAlign: "left" | "center" | "right";
+};
+
 export type JobDto = {
   id: string;
   status: JobStatus;
   progress: number;
   resultUrl: string | null;
   intermediateUrls: Record<string, string> | null;
+  textOverlays: TextOverlayDto[] | null;
   errorMessage: string | null;
   costCents: number | null;
   catalogModelId: string | null;

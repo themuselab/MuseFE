@@ -36,13 +36,14 @@ export default function ResultPage() {
   const [isEditing, setIsEditing] = useState(false);
   const [editedSrc, setEditedSrc] = useState<string | null>(null);
   const canvasRef = useRef<HTMLDivElement | null>(null);
-  const editor = useEditorState(blobUrl ?? "");
+  const editor = useEditorState(blobUrl ?? "", job.data?.textOverlays ?? null);
 
   const captureCanvas = async (): Promise<string | null> => {
     if (!canvasRef.current) return null;
     editor.select(null);
     await new Promise((r) => setTimeout(r, 50));
-    return await toPng(canvasRef.current, { pixelRatio: 2, cacheBust: true });
+    // cacheBust: blob URL에 ?param 붙이면 invalid → false 유지
+    return await toPng(canvasRef.current, { pixelRatio: 2, cacheBust: false });
   };
 
   const handleEditDone = async () => {

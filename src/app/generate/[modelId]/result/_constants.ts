@@ -25,5 +25,6 @@ export const COLOR_SWATCHES: ReadonlyArray<string> = [
 
 export const MAX_HISTORY = 50;
 
-export const CANVAS_ASPECT = "396/528";
+// BE 출력이 1024×1536(2:3) 세로형이라 동일 비율 유지
+export const CANVAS_ASPECT = "2/3";
 

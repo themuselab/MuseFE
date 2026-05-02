@@ -55,7 +55,7 @@ export function EditorCanvas({ api, canvasRef }: EditorCanvasProps) {
       <div
         ref={canvasRef}
         onPointerDown={handleCanvasClick}
-        className="relative w-full aspect-[396/528] rounded-xl overflow-hidden border border-neutral-200 bg-neutral-50 select-none touch-none"
+        className="relative w-full aspect-2/3 rounded-xl overflow-hidden border border-neutral-200 bg-neutral-50 select-none touch-none"
       >
         {state.layers.map((layer) =>
           layer.type === "image" ? (
