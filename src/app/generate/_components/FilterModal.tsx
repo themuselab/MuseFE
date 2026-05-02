@@ -59,11 +59,11 @@ function isImpression(value: string): value is ImpressionFilter {
   return (
     value === "all" ||
     value === "trust" ||
-    value === "friendly" ||
-    value === "intimate" ||
     value === "sophisticated" ||
-    value === "lively" ||
-    value === "comfortable"
+    value === "friendly" ||
+    value === "comfortable" ||
+    value === "professional" ||
+    value === "lively"
   );
 }
 
