@@ -1,12 +1,4 @@
-import type { TopModel, UseCase } from "./_types";
-
-export const TOP_MODELS: TopModel[] = [
-  { id: "m1", rank: 1, name: "홍길동", tags: ["신뢰감", "세련미"], imageUrl: null },
-  { id: "m2", rank: 2, name: "홍길동", tags: ["신뢰감", "세련미"], imageUrl: null },
-  { id: "m3", rank: 3, name: "홍길동", tags: ["신뢰감", "세련미"], imageUrl: null },
-  { id: "m4", rank: 4, name: "홍길동", tags: ["신뢰감", "세련미"], imageUrl: null },
-  { id: "m5", rank: 5, name: "홍길동", tags: ["신뢰감", "세련미"], imageUrl: null },
-];
+import type { UseCase } from "./_types";
 
 export const USE_CASES: UseCase[] = [
   {
