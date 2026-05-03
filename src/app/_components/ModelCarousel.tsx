@@ -1,16 +1,18 @@
 "use client";
 
+import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 type ModelCard = {
   id: number;
   label: string;
   color: string;
+  imageUrl?: string;
 };
 
 const MODEL_CARDS: ModelCard[] = [
-  { id: 1, label: "세련된 전문가", color: "#F3498D" },
-  { id: 2, label: "신뢰감 있는 리더", color: "#A63EB1" },
+  { id: 1, label: "세련된 전문가", color: "#F3498D", imageUrl: "/images/landing/model-1.png" },
+  { id: 2, label: "신뢰감 있는 리더", color: "#A63EB1", imageUrl: "/images/landing/model-2.png" },
   { id: 3, label: "친근한 이웃", color: "#92878C" },
   { id: 4, label: "활발한 크리에이터", color: "#E6196B" },
   { id: 5, label: "편안한 상담사", color: "#862D8F" },
@@ -143,19 +145,29 @@ export function ModelCarousel() {
                   : "none",
               }}
             >
-              {/* 카드 내부 — 플레이스홀더 */}
-              <div className="w-full h-full rounded-lg bg-neutral-200 flex flex-col items-center justify-center gap-3 overflow-hidden">
-                {/* 상반신 실루엣 */}
-                <div
-                  className="w-[107px] h-[145px] rounded-t-[371px]"
-                  style={{ backgroundColor: isActive ? card.color + "33" : "#92878C33" }}
-                />
-                <span
-                  className="text-label-m"
-                  style={{ color: isActive ? card.color : "#92878C" }}
-                >
-                  {card.label}
-                </span>
+              {/* 카드 내부 — 이미지 또는 플레이스홀더 */}
+              <div className="relative w-full h-full rounded-lg bg-neutral-200 flex flex-col items-center justify-center gap-3 overflow-hidden">
+                {card.imageUrl ? (
+                  <Image
+                    src={card.imageUrl}
+                    alt={card.label}
+                    fill
+                    className="object-cover"
+                  />
+                ) : (
+                  <>
+                    <div
+                      className="w-[107px] h-[145px] rounded-t-[371px]"
+                      style={{ backgroundColor: isActive ? card.color + "33" : "#92878C33" }}
+                    />
+                    <span
+                      className="text-label-m"
+                      style={{ color: isActive ? card.color : "#92878C" }}
+                    >
+                      {card.label}
+                    </span>
+                  </>
+                )}
               </div>
             </div>
           );

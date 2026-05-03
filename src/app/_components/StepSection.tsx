@@ -1,26 +1,6 @@
 "use client";
 
-function ImagePlaceholder({ label }: { label: string }) {
-  return (
-    <div className="w-full aspect-square max-h-[320px] rounded-lg bg-neutral-100 flex items-center justify-center">
-      <div className="flex flex-col items-center gap-2 text-neutral-400">
-        <svg
-          width="32"
-          height="32"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.5"
-        >
-          <rect x="3" y="3" width="18" height="18" rx="2" />
-          <circle cx="8.5" cy="8.5" r="1.5" />
-          <path d="m21 15-5-5L5 21" />
-        </svg>
-        <span className="text-caption-s">{label}</span>
-      </div>
-    </div>
-  );
-}
+import Image from "next/image";
 
 function ModelCardPlaceholder() {
   return (
@@ -80,8 +60,8 @@ export function StepSection() {
                 업종별로 검증된 모델 인상.{"\n"}바로 선택하면 됩니다.
               </p>
             </div>
-            {/* 모델 카드 이미지들 */}
-            <div className="flex gap-[10.5px] justify-center w-full">
+            {/* 모델 카드 이미지들 — 데스크탑 2×2, 모바일/태블릿 1×4 가로 */}
+            <div className="grid grid-cols-2 gap-[10.5px] justify-items-center w-full max-md:flex max-md:justify-center">
               {[1, 2, 3, 4].map((i) => (
                 <ModelCardPlaceholder key={i} />
               ))}
@@ -122,7 +102,13 @@ export function StepSection() {
                 모델에 제품을 바로 합성.{"\n"}광고 소재 완성까지 뮤즈 안에서.
               </p>
             </div>
-            <ImagePlaceholder label="합성 이미지" />
+            <Image
+              src="/images/landing/step3.png"
+              width={296}
+              height={296}
+              alt="제품 합성 결과"
+              className="w-full aspect-square max-h-80 rounded-lg object-cover"
+            />
             <GradientDot />
           </div>
         </div>

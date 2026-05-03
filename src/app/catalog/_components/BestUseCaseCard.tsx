@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { ArrowIcon } from "@/components/ArrowIcon";
 import type { UseCase } from "../_types";
 
@@ -10,13 +11,25 @@ export function BestUseCaseCard({ useCase }: BestUseCaseCardProps) {
     <article className="flex flex-col gap-4">
       <div className="relative bg-neutral-200 rounded-md overflow-hidden aspect-2/1">
         <div className="grid grid-cols-2 h-full">
-          <div className="relative flex items-end justify-center pb-4">
-            <span className="inline-flex items-center px-3 py-1 rounded-full bg-pink-50 text-caption-s text-neutral-500">
+          <div className="relative">
+            <Image
+              src="/images/catalog/case-left.png"
+              alt="모델 원본"
+              fill
+              className="object-cover"
+            />
+            <span className="absolute bottom-4 left-1/2 -translate-x-1/2 inline-flex items-center px-3 py-1 rounded-full bg-pink-50 text-caption-s text-neutral-500">
               모델 원본
             </span>
           </div>
-          <div className="relative flex items-end justify-center pb-4">
-            <span className="inline-flex items-center px-3 py-1 rounded-full bg-pink-100 text-caption-s text-pink-700">
+          <div className="relative">
+            <Image
+              src="/images/catalog/case-right.png"
+              alt="muse 생성 광고"
+              fill
+              className="object-cover"
+            />
+            <span className="absolute bottom-4 left-1/2 -translate-x-1/2 inline-flex items-center px-3 py-1 rounded-full bg-pink-100 text-caption-s text-pink-700">
               muse 생성 광고
             </span>
           </div>
@@ -33,7 +46,7 @@ export function BestUseCaseCard({ useCase }: BestUseCaseCardProps) {
           </span>
         </div>
         <h3 className="text-heading-s text-neutral-900">{useCase.title}</h3>
-        <p className="text-body-m text-neutral-600">{useCase.description}</p>
+        <p className="text-body-l md:text-body-m text-neutral-500 md:text-neutral-600">{useCase.description}</p>
       </div>
     </article>
   );
