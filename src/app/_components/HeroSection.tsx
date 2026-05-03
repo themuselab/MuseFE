@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { Button } from "@/components/Button";
 import { RadarChart } from "./RadarChart";
 import { HeroBanner } from "./HeroBanner";
@@ -64,47 +65,31 @@ export function HeroSection() {
                   "linear-gradient(135deg, #FFD1E3 0%, #DFBAE3 100%)",
               }}
             >
-              <div className="w-full h-full rounded-[10px] bg-neutral-200 flex items-center justify-center">
-                <div className="flex flex-col items-center gap-2 text-neutral-400">
-                  <svg
-                    width="48"
-                    height="48"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                  >
-                    <rect x="3" y="3" width="18" height="18" rx="2" />
-                    <circle cx="8.5" cy="8.5" r="1.5" />
-                    <path d="m21 15-5-5L5 21" />
-                  </svg>
-                  <span className="text-label-m">모델 이미지</span>
-                </div>
-              </div>
+              <Image
+                src="/images/landing/hero-1.png"
+                width={488}
+                height={488}
+                alt="AI 모델"
+                priority
+                className="w-full h-full rounded-[10px] object-cover"
+              />
             </div>
 
             {/* 좌하단 겹치는 그림자 실루엣 */}
             <div
-              className="absolute left-0 top-[70px] w-[282px] h-[423px] rounded-lg bg-neutral-200 flex items-center justify-center"
+              className="absolute left-0 top-[70px] w-[282px] h-[423px] rounded-lg overflow-hidden"
               style={{
                 boxShadow: "0 15.75px 31.5px rgba(0,0,0,0.25)",
-                filter: "blur(0px)",
               }}
             >
-              <div className="flex flex-col items-center gap-2 text-neutral-400">
-                <svg
-                  width="40"
-                  height="40"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                >
-                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                  <circle cx="12" cy="7" r="4" />
-                </svg>
-                <span className="text-caption-s">모델 실루엣</span>
-              </div>
+              <Image
+                src="/images/landing/hero-2.png"
+                width={282}
+                height={423}
+                alt="AI 모델 실루엣"
+                priority
+                className="w-full h-full object-cover"
+              />
             </div>
           </div>
         </div>
