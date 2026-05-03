@@ -168,36 +168,29 @@ export function AuthGNB({ activeTab }: AuthGNBProps = {}) {
     </div>
   ) : null;
 
-  return (
-    <div className="relative">
-      <GNB
-        state={isLoggedIn ? "login" : "logout"}
-        tabs={TABS.map(({ label, value }) => ({ label, value }))}
-        activeTab={resolvedActiveTab}
-        onTabClick={handleTabClick}
-        onLoginClick={() => router.push("/login")}
-        userName={initial}
-        creditBalance={isLoggedIn ? DUMMY_CREDITS : undefined}
-        hasUnreadNotifications={isLoggedIn && hasUnread}
-        onNotificationClick={handleBellClick}
-        onAvatarClick={handleAvatarClick}
+  const notificationPopover =
+    isLoggedIn ? (
+      <NotificationModal
+        open={notifOpen}
+        onClose={handleNotifClose}
+        items={DUMMY_NOTIFICATIONS}
       />
+    ) : null;
 
-      {/* 알림 팝오버 */}
-      {isLoggedIn && (
-        <div className="absolute top-20 right-6 md:right-30 z-40">
-          <NotificationModal
-            open={notifOpen}
-            onClose={handleNotifClose}
-            items={DUMMY_NOTIFICATIONS}
-          />
-        </div>
-      )}
-
-      {/* 프로필 드롭다운 */}
-      <div className="absolute top-20 right-6 md:right-30 z-40">
-        {profileDropdown}
-      </div>
-    </div>
+  return (
+    <GNB
+      state={isLoggedIn ? "login" : "logout"}
+      tabs={TABS.map(({ label, value }) => ({ label, value }))}
+      activeTab={resolvedActiveTab}
+      onTabClick={handleTabClick}
+      onLoginClick={() => router.push("/login")}
+      userName={initial}
+      creditBalance={isLoggedIn ? DUMMY_CREDITS : undefined}
+      hasUnreadNotifications={isLoggedIn && hasUnread}
+      onNotificationClick={handleBellClick}
+      onAvatarClick={handleAvatarClick}
+      notificationPopover={notificationPopover}
+      profilePopover={profileDropdown}
+    />
   );
 }

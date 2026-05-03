@@ -26,6 +26,8 @@ type GNBProps = {
   onAvatarClick?: () => void;
   logo?: ReactNode;
   className?: string;
+  notificationPopover?: ReactNode;
+  profilePopover?: ReactNode;
 };
 
 const DEFAULT_TABS: GNBTab[] = [
@@ -100,6 +102,8 @@ export function GNB({
   onAvatarClick,
   logo,
   className = "",
+  notificationPopover,
+  profilePopover,
 }: GNBProps) {
   const isLanding = state === "landing";
 
@@ -134,17 +138,24 @@ export function GNB({
       {/* 오른쪽 */}
       {state === "login" ? (
         <div className="flex items-center gap-3 lg:gap-4">
-          <button
-            type="button"
-            onClick={onNotificationClick}
-            className="relative cursor-pointer p-1"
-            aria-label="알림"
-          >
-            <BellIcon />
-            {hasUnreadNotifications && (
-              <span className="absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-pink-400" />
+          <div className="relative">
+            <button
+              type="button"
+              onClick={onNotificationClick}
+              className="relative cursor-pointer p-1 block"
+              aria-label="알림"
+            >
+              <BellIcon />
+              {hasUnreadNotifications && (
+                <span className="absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-pink-400" />
+              )}
+            </button>
+            {notificationPopover && (
+              <div className="absolute top-full right-0 mt-3 z-40">
+                {notificationPopover}
+              </div>
             )}
-          </button>
+          </div>
           {creditBalance !== undefined && (
             <div
               className="flex items-center gap-1 bg-neutral-100 rounded-sm px-1.5 py-0.5 select-none"
@@ -156,10 +167,17 @@ export function GNB({
               </span>
             </div>
           )}
-          <button type="button" onClick={onAvatarClick} className="cursor-pointer" aria-label="프로필">
-            <span className="hidden lg:block"><Avatar name={userName} size="lg" /></span>
-            <span className="block lg:hidden"><Avatar name={userName} size="md" /></span>
-          </button>
+          <div className="relative">
+            <button type="button" onClick={onAvatarClick} className="cursor-pointer block" aria-label="프로필">
+              <span className="hidden lg:block"><Avatar name={userName} size="lg" /></span>
+              <span className="block lg:hidden"><Avatar name={userName} size="md" /></span>
+            </button>
+            {profilePopover && (
+              <div className="absolute top-full right-0 mt-3 z-40">
+                {profilePopover}
+              </div>
+            )}
+          </div>
         </div>
       ) : (
         <GNBTabButton
