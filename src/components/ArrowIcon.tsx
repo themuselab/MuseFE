@@ -17,10 +17,10 @@ const sizeConfig: Record<
 };
 
 const rotationMap: Record<ArrowDirection, string> = {
-  down: "rotate(0)",
-  up: "rotate(180)",
-  left: "rotate(90)",
-  right: "rotate(-90)",
+  down: "rotate(0deg)",
+  up: "rotate(180deg)",
+  left: "rotate(90deg)",
+  right: "rotate(-90deg)",
 };
 
 export function ArrowIcon({
