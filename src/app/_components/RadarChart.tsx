@@ -2,16 +2,14 @@
 
 type RadarChartProps = {
   className?: string;
+  showLabels?: boolean;
+  highlights?: string[];
 };
 
-const LABELS = [
-  { text: "신뢰감", angle: -90 },
-  { text: "세련됨", angle: -18 },
-  { text: "친근함", angle: 54 },
-  { text: "편안함", angle: 126 },
-  { text: "전문성", angle: 198 },
-  { text: "활발함", angle: 270 - 360 + 360 },
-];
+const LABELS = ["신뢰감", "세련됨", "친근함", "편안함", "전문성", "활발함"];
+
+const HIGHLIGHT_RADIUS = 0.85;
+const NORMAL_RADIUS = 0.4;
 
 function polarToCartesian(cx: number, cy: number, r: number, angleDeg: number) {
   const rad = ((angleDeg - 90) * Math.PI) / 180;
@@ -26,26 +24,20 @@ function polygonPoints(cx: number, cy: number, r: number, sides: number) {
   }).join(" ");
 }
 
-export function RadarChart({ className = "" }: RadarChartProps) {
+export function RadarChart({
+  className = "",
+  showLabels = true,
+  highlights = ["신뢰감", "세련됨"],
+}: RadarChartProps) {
   const cx = 356;
   const cy = 330;
   const radii = [50, 100, 150, 200, 250];
-  const sides = 6;
-  const highlightRadii = [0.8, 0.9];
-  const normalRadii = [0.55, 0.6, 0.4, 0.3];
+  const sides = LABELS.length;
 
-  const highlightPoints = [0, 1].map((i) => {
-    const r = highlightRadii[i] * 250;
-    return polarToCartesian(cx, cy, r, (360 / sides) * i);
+  const dataPoints = LABELS.map((label, i) => {
+    const ratio = highlights.includes(label) ? HIGHLIGHT_RADIUS : NORMAL_RADIUS;
+    return polarToCartesian(cx, cy, ratio * 250, (360 / sides) * i);
   });
-
-  const dataPoints = [
-    ...highlightPoints,
-    ...[2, 3, 4, 5].map((i, idx) => {
-      const r = normalRadii[idx] * 250;
-      return polarToCartesian(cx, cy, r, (360 / sides) * i);
-    }),
-  ];
 
   const dataPolygon = dataPoints.map((p) => `${p.x},${p.y}`).join(" ");
 
@@ -94,24 +86,25 @@ export function RadarChart({ className = "" }: RadarChartProps) {
       />
 
       {/* 라벨 */}
-      {LABELS.map((label, i) => {
-        const pos = polarToCartesian(cx, cy, 280, (360 / sides) * i);
-        const isHighlight = i < 2;
-        return (
-          <text
-            key={label.text}
-            x={pos.x}
-            y={pos.y}
-            textAnchor="middle"
-            dominantBaseline="middle"
-            fill={isHighlight ? "#F3498D" : "#92878C"}
-            fontSize="17"
-            fontFamily="Pretendard"
-          >
-            {label.text}
-          </text>
-        );
-      })}
+      {showLabels &&
+        LABELS.map((label, i) => {
+          const pos = polarToCartesian(cx, cy, 280, (360 / sides) * i);
+          const isHighlight = highlights.includes(label);
+          return (
+            <text
+              key={label}
+              x={pos.x}
+              y={pos.y}
+              textAnchor="middle"
+              dominantBaseline="middle"
+              fill={isHighlight ? "#F3498D" : "#92878C"}
+              fontSize="17"
+              fontFamily="Pretendard"
+            >
+              {label}
+            </text>
+          );
+        })}
     </svg>
   );
 }

@@ -108,7 +108,10 @@ export function FeatureSection() {
   return (
     <section className="relative w-full bg-neutral-50 overflow-hidden">
       {/* 배경 레이더차트 */}
-      <RadarChart className="absolute -left-[189px] -top-[486px] w-[717px] h-[664px] opacity-30 pointer-events-none max-md:hidden" />
+      <RadarChart
+        showLabels={false}
+        className="absolute -left-[189px] -top-[486px] w-[717px] h-[664px] opacity-30 pointer-events-none max-md:hidden"
+      />
 
       <div className="relative z-10 max-w-[1440px] mx-auto px-[120px] py-[120px] flex flex-col items-center gap-20 max-md:px-6 max-md:py-20 max-md:gap-[60px]">
         {/* 헤더 */}
