@@ -4,10 +4,10 @@ import Image from "next/image";
 
 export function HeroBanner() {
   return (
-    <div className="w-full bg-neutral-900 h-34 relative overflow-hidden">
+    <div className="relative h-34 w-full overflow-hidden bg-neutral-900">
       {/* 좌측 텍스트 — 1440px 컨테이너 기준 */}
-      <div className="max-w-360 mx-auto relative h-full">
-        <div className="absolute left-60 top-8 flex flex-col gap-2 max-md:left-6">
+      <div className="relative mx-auto h-full max-w-360">
+        <div className="absolute top-8 left-60 flex flex-col gap-2 max-md:left-6">
           <p className="text-heading-m text-neutral-50">
             🎁 신규 가입자를 위한 혜택!
           </p>
@@ -17,10 +17,7 @@ export function HeroBanner() {
         </div>
 
         {/* 우측 쿠폰 카드 */}
-        <div
-          className="absolute right-55 -top-6.25 max-md:right-6"
-          style={{ transform: "rotate(-13deg)" }}
-        >
+        <div className="right-upload-card-sm absolute max-md:right-6">
           <Image
             src="/images/landing/early-bird.png"
             width={213}
