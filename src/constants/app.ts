@@ -36,6 +36,14 @@ export const INDUSTRY_MAIN_OPTIONS = [
   { label: "인쇄·목재·가구·공예", value: "printing_furniture_craft" },
   { label: "환경·에너지·안전", value: "environment_energy_safety" },
   { label: "농림어업", value: "agriculture_forestry_fishery" },
+  { label: "교육", value: "education" },
+  { label: "가전·생활·인테리어", value: "home_living" },
+  { label: "여행·항공", value: "travel_aviation" },
+  { label: "헬스·스포츠", value: "health_sports" },
+  { label: "육아·키즈", value: "childcare_kids" },
+  { label: "건강·제약", value: "health_pharma" },
+  { label: "패션·의류", value: "fashion_clothing" },
+  { label: "자동차", value: "automotive" },
 ] as const;
 
 export type AgreementSection = {
