@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { TopModelCard } from "./TopModelCard";
 import { ArrowIcon } from "@/components/ArrowIcon";
 import type { TopModel } from "../_types";
@@ -8,9 +7,14 @@ import type { TopModel } from "../_types";
 type TopModelsSectionProps = {
   categoryLabel: string;
   models: TopModel[];
+  onModelClick?: (model: TopModel) => void;
 };
 
-export function TopModelsSection({ categoryLabel, models }: TopModelsSectionProps) {
+export function TopModelsSection({
+  categoryLabel,
+  models,
+  onModelClick,
+}: TopModelsSectionProps) {
   return (
     <section className="flex flex-col gap-6">
       <header className="flex items-end justify-between gap-4">
@@ -22,24 +26,18 @@ export function TopModelsSection({ categoryLabel, models }: TopModelsSectionProp
             {categoryLabel}의 모델 Top 5 🔥
           </h2>
         </div>
-        <Link
-          href="/catalog/all"
-          className="text-label-m text-neutral-700 shrink-0"
-        >
-          전체 보기
-        </Link>
       </header>
 
       <div className="relative">
         <div className="hidden md:grid md:grid-cols-5 md:gap-5">
           {models.map((model) => (
-            <TopModelCard key={model.id} model={model} />
+            <TopModelCard key={model.id} model={model} onClick={onModelClick} />
           ))}
         </div>
         <div className="flex md:hidden gap-4 overflow-x-auto snap-x pb-2 -mx-6 px-6">
           {models.map((model) => (
             <div key={model.id} className="snap-start w-52 shrink-0">
-              <TopModelCard model={model} />
+              <TopModelCard model={model} onClick={onModelClick} />
             </div>
           ))}
         </div>

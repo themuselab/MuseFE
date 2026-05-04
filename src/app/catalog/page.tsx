@@ -5,7 +5,10 @@ import { useRouter } from "next/navigation";
 import { AuthGNB } from "@/components/AuthGNB";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { useTopCatalogModels } from "@/hooks/useTopCatalogModels";
-import { INDUSTRY_MAIN_OPTIONS } from "@/constants/app";
+import {
+  INDUSTRY_MAIN_OPTIONS,
+  WELCOME_MODAL_DISMISSED_KEY,
+} from "@/constants/app";
 import { CatalogHero } from "./_components/CatalogHero";
 import { TopModelsSection } from "./_components/TopModelsSection";
 import { BestUseCaseSection } from "./_components/BestUseCaseSection";
@@ -24,7 +27,12 @@ const dtoToTopModel = (dto: CatalogTopModelDto): TopModel => ({
 export default function CatalogPage() {
   const router = useRouter();
   const { data: user } = useCurrentUser();
-  const [welcomeOpen, setWelcomeOpen] = useState(true);
+  const [welcomeOpen, setWelcomeOpen] = useState<boolean>(() => {
+    if (typeof window === "undefined") return false;
+    return (
+      window.localStorage.getItem(WELCOME_MODAL_DISMISSED_KEY) !== "true"
+    );
+  });
 
   const industryMain = user?.business?.industryMain;
   const industryLabel =
@@ -36,21 +44,40 @@ export default function CatalogPage() {
     [topQuery.data],
   );
 
+  const dismissWelcome = () => {
+    if (typeof window !== "undefined") {
+      window.localStorage.setItem(WELCOME_MODAL_DISMISSED_KEY, "true");
+    }
+    setWelcomeOpen(false);
+  };
+
+  const handleModelClick = () => {
+    if (!user) {
+      router.push(`/login?from=${encodeURIComponent("/catalog")}`);
+      return;
+    }
+    router.push("/generate");
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-neutral-50">
       <AuthGNB activeTab="catalog" />
       <main className="flex-1 flex flex-col gap-12 md:gap-20 px-6 md:px-30 pb-20 max-w-[1440px] w-full mx-auto">
         <CatalogHero />
-        <TopModelsSection categoryLabel={industryLabel} models={topModels} />
+        <TopModelsSection
+          categoryLabel={industryLabel}
+          models={topModels}
+          onModelClick={handleModelClick}
+        />
         <BestUseCaseSection />
       </main>
 
       {!user && (
         <WelcomeModal
           open={welcomeOpen}
-          onDismiss={() => setWelcomeOpen(false)}
+          onDismiss={dismissWelcome}
           onStart={() => {
-            setWelcomeOpen(false);
+            dismissWelcome();
             router.push("/signup");
           }}
         />
