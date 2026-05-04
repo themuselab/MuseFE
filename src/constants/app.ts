@@ -121,3 +121,6 @@ export const AD_CREATE_KEYS = {
   product: (modelId: string) => `ad-create-product:${modelId}`,
   job: (modelId: string) => `ad-create-job:${modelId}`,
 } as const;
+
+// 카탈로그 진입 시 비회원에게 노출되는 WelcomeModal "다시 보지 않기" 영구 플래그
+export const WELCOME_MODAL_DISMISSED_KEY = "muse:welcomeModalDismissed";
