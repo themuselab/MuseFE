@@ -2,15 +2,6 @@
 
 import { ModelCarousel } from "./ModelCarousel";
 
-const IMPRESSIONS = [
-  { text: "세련됨", highlight: true },
-  { text: "신뢰감", highlight: true },
-  { text: "친근함", highlight: false },
-  { text: "편안함", highlight: false },
-  { text: "전문성", highlight: false },
-  { text: "활발함", highlight: false },
-];
-
 export function CatalogSection() {
   return (
     <section className="relative w-full bg-neutral-50 overflow-hidden">
@@ -40,26 +31,8 @@ export function CatalogSection() {
           </div>
         </div>
 
-        {/* 콘텐츠: 인상 태그 + 캐러셀 */}
-        <div className="flex items-center gap-[176px] w-full max-md:flex-col max-md:gap-12">
-          {/* 인상 태그 그리드 */}
-          <div className="grid grid-cols-2 gap-x-[76px] gap-y-[40px] shrink-0 max-md:grid-cols-3 max-md:gap-x-8 max-md:gap-y-6">
-            {IMPRESSIONS.map((imp) => (
-              <span
-                key={imp.text}
-                className="text-display-l text-center max-md:text-heading-l"
-                style={{
-                  color: imp.highlight ? "#F3498D" : "#B6AFB3",
-                }}
-              >
-                {imp.text}
-              </span>
-            ))}
-          </div>
-
-          {/* 캐러셀 */}
-          <ModelCarousel />
-        </div>
+        {/* 캐러셀 */}
+        <ModelCarousel />
       </div>
     </section>
   );

@@ -33,19 +33,22 @@ export function HeroSection() {
                   muse.
                 </span>
                 <h1 className="text-display-2xl text-neutral-900 max-md:text-display-m">
-                  광고,{"\n"}
-                  이제 모델 없이{"\n"}
+                  광고,
+                  <br />
+                  이제 모델 없이
+                  <br />
                   만드세요
                 </h1>
               </div>
               <p className="text-heading-xs text-neutral-700">
-                데이터가 고르고, 광고가 증명합니다.{"\u2028"}20만 장의 인상
-                데이터로 업종별 최적 AI 모델을 즉시 생성합니다.
+                데이터가 고르고, 광고가 증명합니다.
+                <br />
+                20만 장의 인상 데이터로 업종별 최적 AI 모델을 즉시 생성합니다.
               </p>
             </div>
 
             {/* CTA 버튼 */}
-            <div className="flex items-center gap-3 flex-wrap">
+            <div className="flex items-center gap-3">
               <Button hierarchy="accent" size="large" className="shrink-0 whitespace-nowrap">
                 지금 바로 광고 생성하기
               </Button>
@@ -55,42 +58,16 @@ export function HeroSection() {
             </div>
           </div>
 
-          {/* 우측 모델 이미지 */}
+          {/* 우측 모델 카드 이미지 */}
           <div className="relative max-md:hidden">
-            {/* 메인 이미지 플레이스홀더 — gradient border via wrapper */}
-            <div
-              className="w-[492px] h-[492px] rounded-xl p-[2px] ml-[189px]"
-              style={{
-                background:
-                  "linear-gradient(135deg, #FFD1E3 0%, #DFBAE3 100%)",
-              }}
-            >
-              <Image
-                src="/images/landing/hero-1.png"
-                width={488}
-                height={488}
-                alt="AI 모델"
-                priority
-                className="w-full h-full rounded-[10px] object-cover"
-              />
-            </div>
-
-            {/* 좌하단 겹치는 그림자 실루엣 */}
-            <div
-              className="absolute left-0 top-[70px] w-[282px] h-[423px] rounded-lg overflow-hidden"
-              style={{
-                boxShadow: "0 15.75px 31.5px rgba(0,0,0,0.25)",
-              }}
-            >
-              <Image
-                src="/images/landing/hero-2.png"
-                width={282}
-                height={423}
-                alt="AI 모델 실루엣"
-                priority
-                className="w-full h-full object-cover"
-              />
-            </div>
+            <Image
+              src="/images/landing/hero-card.png"
+              width={526}
+              height={777}
+              alt="AI 모델 강연우 - 건강한 미소"
+              priority
+              className="w-131.5 h-auto"
+            />
           </div>
         </div>
       </div>
