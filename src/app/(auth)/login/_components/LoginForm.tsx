@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { TextField } from "@/components/TextField";
 import { Button } from "@/components/Button";
 import { SocialButton } from "@/components/SocialButton";
@@ -9,11 +9,13 @@ import { VisibilityOnIcon, VisibilityOffIcon } from "@/components/Icon";
 import { ThreeDots } from "@/components/ThreeDots";
 import { useLogin } from "@/hooks/useLogin";
 import { loginSchema } from "@/lib/validation";
+import { safeRedirectPath } from "@/lib/safeRedirect";
 import { API_URL } from "@/constants/app";
 import Link from "next/link";
 
 export function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const loginMutation = useLogin();
 
   const [email, setEmail] = useState("");
@@ -52,7 +54,7 @@ export function LoginForm() {
         onSuccess: (res) => {
           clearInterval(interval);
           if (res.success) {
-            router.push("/");
+            router.push(safeRedirectPath(searchParams.get("from")));
           } else {
             setServerError(res.error.message);
           }
