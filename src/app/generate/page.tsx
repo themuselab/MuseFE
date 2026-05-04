@@ -6,6 +6,7 @@ import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { useCatalogModels } from "@/hooks/useCatalogModels";
 import { useTopCatalogModels } from "@/hooks/useTopCatalogModels";
 import { INDUSTRY_MAIN_OPTIONS } from "@/constants/app";
+import { useRouter } from "next/navigation";
 import { useMemo } from "react";
 import { TopRankingSection } from "./_components/TopRankingSection";
 import { ModelFilterBar } from "./_components/ModelFilterBar";
@@ -32,6 +33,7 @@ const dtoToModel = (dto: CatalogModelDto | CatalogTopModelDto): Model => ({
 });
 
 export default function GeneratePage() {
+  const router = useRouter();
   const { data: user } = useCurrentUser();
   const industryMain = user?.business?.industryMain;
   const industryLabel = INDUSTRY_MAIN_OPTIONS.find(
@@ -80,6 +82,14 @@ export default function GeneratePage() {
     close: closeDetail,
   } = useModelDetail();
 
+  const handleModelClick = (model: Model) => {
+    if (!user) {
+      router.push(`/login?from=${encodeURIComponent("/generate")}`);
+      return;
+    }
+    openDetail(model);
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-neutral-50">
       <AuthGNB activeTab="create" />
@@ -88,7 +98,7 @@ export default function GeneratePage() {
         <TopRankingSection
           categoryLabel={industryLabel}
           models={topModels}
-          onModelClick={openDetail}
+          onModelClick={handleModelClick}
         />
 
         <hr className="border-t border-neutral-200" />
@@ -101,7 +111,7 @@ export default function GeneratePage() {
 
         <ModelStatsBar total={total} sort={sort} onSortChange={setSort} />
 
-        <ModelGrid models={allModels} onModelClick={openDetail} />
+        <ModelGrid models={allModels} onModelClick={handleModelClick} />
       </main>
 
       <div className="hidden md:block fixed top-1/2 right-3 -translate-y-1/2 pointer-events-none">
