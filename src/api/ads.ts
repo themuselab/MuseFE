@@ -5,6 +5,7 @@ import type {
   JobDto,
   RecommendMoodsRequest,
   RecommendMoodsResponse,
+  ReOverlayRequest,
   UploadProductImageResponse,
 } from "@/types/ad";
 
@@ -31,4 +32,10 @@ export const adsApi = {
     }),
 
   getJob: (jobId: string) => fetchClient<JobDto>(`/ads/jobs/${jobId}`),
+
+  reOverlay: (jobId: string, data: ReOverlayRequest) =>
+    fetchClient<JobDto>(`/ads/jobs/${jobId}/re-overlay`, {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
 };

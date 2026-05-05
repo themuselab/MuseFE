@@ -82,6 +82,14 @@ export type GenerateAdRequest = {
   item?: string;
   extraDescription?: string;
   mood?: string;
+  preferredLabel?: string;
+  aspectRatio?: "9:16" | "1:1" | "16:9";
+};
+
+export type ReOverlayRequest = {
+  headline: string;
+  subhead?: string;
+  cta?: string;
 };
 
 export type GenerateAdResponse = {
@@ -111,6 +119,8 @@ export type JobDto = {
   status: JobStatus;
   progress: number;
   resultUrl: string | null;
+  originalResultUrl: string | null;
+  baseImageUrl: string | null;
   intermediateUrls: Record<string, string> | null;
   textOverlays: TextOverlayDto[] | null;
   errorMessage: string | null;
@@ -119,6 +129,7 @@ export type JobDto = {
   prompt: string;
   headline: string | null;
   subhead: string | null;
+  cta: string | null;
   industry: string | null;
   item: string | null;
   extraDescription: string | null;
