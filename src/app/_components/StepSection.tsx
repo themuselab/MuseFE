@@ -2,14 +2,21 @@
 
 import Image from "next/image";
 
-function ModelCardPlaceholder() {
-  return (
-    <div className="w-[66px] h-[91px] rounded bg-neutral-200 flex flex-col items-center justify-center gap-1 shrink-0">
-      <div className="w-[40px] h-[50px] rounded-t-[371px] bg-neutral-300" />
-      <span className="text-[8px] font-medium text-neutral-400">모델</span>
-    </div>
-  );
-}
+const STEP1_CARDS = [
+  { src: "/images/landing/step1/card-1.png", alt: "모델 카드 1" },
+  { src: "/images/landing/step1/card-2.png", alt: "모델 카드 2" },
+  { src: "/images/landing/step1/card-3.png", alt: "모델 카드 3" },
+  { src: "/images/landing/step1/card-4.png", alt: "모델 카드 4" },
+];
+
+// design.pen Group 33876 좌표를 320×420 프레임 기준으로 절대 배치
+const STEP2_IMAGES = [
+  { src: "/images/landing/step2/45deg.png", alt: "45도 모델", x: 17, y: 0, w: 103, h: 185, rotate: 0, shadow: false },
+  { src: "/images/landing/step2/offgaze.png", alt: "오프게이즈 모델", x: 152, y: 0, w: 142, h: 254, rotate: 0, shadow: false },
+  { src: "/images/landing/step2/fullbody.png", alt: "풀바디 모델", x: 0, y: 147, w: 138, h: 247, rotate: 0, shadow: false },
+  { src: "/images/landing/step2/action.png", alt: "액션 모델", x: 181, y: 172, w: 120, h: 214, rotate: -6.8, shadow: false },
+  { src: "/images/landing/step2/front.png", alt: "정면 모델", x: 83, y: 74, w: 135, h: 242, rotate: 0, shadow: true },
+];
 
 function GradientDot() {
   return (
@@ -62,8 +69,15 @@ export function StepSection() {
             </div>
             {/* 모델 카드 이미지들 — 데스크탑 2×2, 모바일/태블릿 1×4 가로 */}
             <div className="grid grid-cols-2 gap-[10.5px] justify-items-center w-full max-md:flex max-md:justify-center">
-              {[1, 2, 3, 4].map((i) => (
-                <ModelCardPlaceholder key={i} />
+              {STEP1_CARDS.map((card) => (
+                <Image
+                  key={card.src}
+                  src={card.src}
+                  alt={card.alt}
+                  width={150}
+                  height={207}
+                  className="w-[150px] h-[207px] rounded-md object-cover shrink-0"
+                />
               ))}
             </div>
             <GradientDot />
@@ -82,10 +96,25 @@ export function StepSection() {
                 선택한 인상 그대로.{"\n"}상세페이지·배너·영상 어디든 동일한 얼굴.
               </p>
             </div>
-            <div className="w-full max-w-[296px] h-[370px] rounded-lg bg-neutral-100 flex items-center justify-center">
-              <span className="text-heading-xs text-neutral-400 text-center">
-                이미지 준비중
-              </span>
+            <div className="relative w-full max-w-[320px] h-[420px]">
+              {STEP2_IMAGES.map((img) => (
+                <Image
+                  key={img.src}
+                  src={img.src}
+                  alt={img.alt}
+                  width={img.w}
+                  height={img.h}
+                  className="absolute object-cover rounded-sm"
+                  style={{
+                    left: `${(img.x / 320) * 100}%`,
+                    top: `${(img.y / 420) * 100}%`,
+                    width: `${(img.w / 320) * 100}%`,
+                    height: `${(img.h / 420) * 100}%`,
+                    transform: img.rotate ? `rotate(${img.rotate}deg)` : undefined,
+                    boxShadow: img.shadow ? "0 2.5px 4.3px rgba(0,0,0,0.25)" : undefined,
+                  }}
+                />
+              ))}
             </div>
           </div>
 
@@ -103,11 +132,11 @@ export function StepSection() {
               </p>
             </div>
             <Image
-              src="/images/landing/step3.png"
-              width={296}
-              height={296}
+              src="/images/landing/step3-composite.png"
+              width={320}
+              height={420}
               alt="제품 합성 결과"
-              className="w-full aspect-square max-h-80 rounded-lg object-cover"
+              className="w-full max-w-[320px] h-[420px] rounded-lg object-cover"
             />
             <GradientDot />
           </div>
