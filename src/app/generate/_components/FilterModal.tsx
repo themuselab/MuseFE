@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/Button";
 import { ChipButton } from "@/components/ChipButton";
+import { useCatalogModels } from "@/hooks/useCatalogModels";
 import {
   AGE_OPTIONS,
   GENDER_OPTIONS,
@@ -13,18 +14,17 @@ import type {
   FilterState,
   GenderFilter,
   ImpressionFilter,
+  SortOption,
 } from "../_types";
 
 type FilterModalProps = {
   open: boolean;
-  filters: FilterState;
-  matchCount: number;
+  appliedFilters: FilterState;
+  initialFilters: FilterState;
+  sort: SortOption;
+  keyword: string;
   onClose: () => void;
-  onGenderChange: (gender: GenderFilter) => void;
-  onAgeChange: (age: AgeFilter) => void;
-  onImpressionChange: (impression: ImpressionFilter) => void;
-  onReset: () => void;
-  onApply: () => void;
+  onCommit: (next: FilterState) => void;
 };
 
 function CloseIcon() {
@@ -67,17 +67,44 @@ function isImpression(value: string): value is ImpressionFilter {
   );
 }
 
+const PREVIEW_DEBOUNCE_MS = 250;
+
 export function FilterModal({
   open,
-  filters,
-  matchCount,
+  appliedFilters,
+  initialFilters,
+  sort,
+  keyword,
   onClose,
-  onGenderChange,
-  onAgeChange,
-  onImpressionChange,
-  onReset,
-  onApply,
+  onCommit,
 }: FilterModalProps) {
+  // 모달 안에서만 임시 보관되는 draft. 모달 열릴 때 외부 적용된 filters로 초기화.
+  const [draft, setDraft] = useState<FilterState>(appliedFilters);
+
+  useEffect(() => {
+    if (open) setDraft(appliedFilters);
+  }, [open, appliedFilters]);
+
+  // 미리보기 카운트용 debounce된 draft (BE 호출 빈도 제한)
+  const [debouncedDraft, setDebouncedDraft] = useState<FilterState>(draft);
+  useEffect(() => {
+    const id = setTimeout(() => setDebouncedDraft(draft), PREVIEW_DEBOUNCE_MS);
+    return () => clearTimeout(id);
+  }, [draft]);
+
+  const previewQuery = useCatalogModels(
+    open
+      ? {
+          gender: debouncedDraft.gender,
+          age: debouncedDraft.age,
+          primaryLabel: debouncedDraft.impression,
+          keyword,
+          sort,
+        }
+      : undefined,
+  );
+
+  // ESC 닫기
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
@@ -88,6 +115,14 @@ export function FilterModal({
   }, [open, onClose]);
 
   if (!open) return null;
+
+  const previewCount = previewQuery.data?.total;
+  const isPreviewLoading =
+    previewQuery.isLoading ||
+    previewQuery.isFetching ||
+    debouncedDraft !== draft;
+
+  const handleReset = () => setDraft(initialFilters);
 
   return (
     <div
@@ -119,9 +154,11 @@ export function FilterModal({
                   key={option.value}
                   label={option.label}
                   variant="square"
-                  selected={filters.impression === option.value}
+                  selected={draft.impression === option.value}
                   onClick={() => {
-                    if (isImpression(option.value)) onImpressionChange(option.value);
+                    if (isImpression(option.value)) {
+                      setDraft((prev) => ({ ...prev, impression: option.value as ImpressionFilter }));
+                    }
                   }}
                 />
               ))}
@@ -136,9 +173,11 @@ export function FilterModal({
                   key={option.value}
                   label={option.label}
                   variant="square"
-                  selected={filters.gender === option.value}
+                  selected={draft.gender === option.value}
                   onClick={() => {
-                    if (isGender(option.value)) onGenderChange(option.value);
+                    if (isGender(option.value)) {
+                      setDraft((prev) => ({ ...prev, gender: option.value as GenderFilter }));
+                    }
                   }}
                 />
               ))}
@@ -153,9 +192,11 @@ export function FilterModal({
                   key={option.value}
                   label={option.label}
                   variant="square"
-                  selected={filters.age === option.value}
+                  selected={draft.age === option.value}
                   onClick={() => {
-                    if (isAge(option.value)) onAgeChange(option.value);
+                    if (isAge(option.value)) {
+                      setDraft((prev) => ({ ...prev, age: option.value as AgeFilter }));
+                    }
                   }}
                 />
               ))}
@@ -164,11 +205,17 @@ export function FilterModal({
         </div>
 
         <footer className="flex gap-3 justify-center">
-          <Button hierarchy="secondary" size="medium" onClick={onReset}>
+          <Button hierarchy="secondary" size="medium" onClick={handleReset}>
             초기화
           </Button>
-          <Button hierarchy="primary" size="medium" onClick={onApply}>
-            {matchCount}명의 모델보기
+          <Button
+            hierarchy="primary"
+            size="medium"
+            onClick={() => onCommit(draft)}
+          >
+            {isPreviewLoading || previewCount === undefined
+              ? "모델 보기"
+              : `${previewCount}명의 모델보기`}
           </Button>
         </footer>
       </div>
