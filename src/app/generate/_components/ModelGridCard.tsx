@@ -56,12 +56,14 @@ export function ModelGridCard({
         type="button"
         onClick={() => onClick(model)}
         aria-label={`${model.name} 상세 보기`}
-        className="flex flex-col gap-3 w-full text-left cursor-pointer rounded-md transition-shadow hover:shadow-card-hover"
+        className="flex flex-col gap-3 w-full text-left cursor-pointer rounded-md pb-3 transition-shadow hover:shadow-card-hover"
       >
         {content}
       </button>
     );
   }
 
-  return <article className="flex flex-col gap-3 w-full">{content}</article>;
+  return (
+    <article className="flex flex-col gap-3 w-full pb-3">{content}</article>
+  );
 }

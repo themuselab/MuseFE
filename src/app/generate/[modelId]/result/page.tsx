@@ -1,7 +1,7 @@
 "use client";
 
 import { toPng } from "html-to-image";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { adsApi } from "@/api/ads";
 import { useAdJob } from "@/hooks/useAdJob";
@@ -29,16 +29,25 @@ const findLayerContent = (layers: Layer[], overlayId: string): string => {
 export default function ResultPage() {
   const params = useParams<{ modelId: string }>();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [jobId, setJobId] = useState<string | null>(null);
 
   useEffect(() => {
+    // 1) 히스토리에서 ?jobId=... 로 진입한 경우 — 쿼리 우선, sessionStorage에도 동기화
+    const fromQuery = searchParams.get("jobId");
+    if (fromQuery) {
+      sessionStorage.setItem(AD_CREATE_KEYS.job(params.modelId), fromQuery);
+      setJobId(fromQuery);
+      return;
+    }
+    // 2) 일반 생성 플로우 진입 — sessionStorage에서 복원
     const id = sessionStorage.getItem(AD_CREATE_KEYS.job(params.modelId));
     if (!id) {
       router.replace(`/generate/${params.modelId}/create`);
       return;
     }
     setJobId(id);
-  }, [params.modelId, router]);
+  }, [params.modelId, router, searchParams]);
 
   const job = useAdJob(jobId);
   // 첫 생성 결과(좌측 카드 — 절대 변경 X). 미존재(legacy) 시 resultUrl로 fallback.

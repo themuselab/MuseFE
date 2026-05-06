@@ -140,7 +140,22 @@ export type JobDto = {
   completedAt: string | null;
 };
 
-export type ListJobsResponse = {
-  items: JobDto[];
+export type HistoryJobDto = {
+  id: string;
+  status: "queued" | "processing" | "completed";
+  modelName: string | null;
+  catalogModelId: string | null;
+  item: string | null;
+  resultUrl: string | null;
+  baseImageUrl: string | null;
+  createdAt: string;
+};
+
+export type ListHistoryResponse = {
+  items: HistoryJobDto[];
   nextCursor: string | null;
+};
+
+export type DeleteJobResponse = {
+  id: string;
 };

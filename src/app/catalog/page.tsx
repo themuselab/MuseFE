@@ -20,7 +20,7 @@ const dtoToTopModel = (dto: CatalogTopModelDto): TopModel => ({
   id: dto.id,
   rank: dto.rank,
   name: dto.name,
-  tags: [dto.tags[0] ?? "", dto.tags[1] ?? ""],
+  tags: dto.tags.filter((t): t is string => Boolean(t && t.trim())),
   imageUrl: dto.imageUrl,
 });
 

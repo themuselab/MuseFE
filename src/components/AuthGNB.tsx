@@ -39,14 +39,22 @@ const DUMMY_NOTIFICATIONS: NotificationItem[] = [
 
 const DUMMY_CREDITS = 200;
 
-const TABS = [
+type TabDef = {
+  label: string;
+  value: string;
+  // path: 라우팅 가능한 탭. null이면 표시만 하고 클릭해도 이동하지 않음 (요금제 페이지 미구현)
+  path: string | null;
+};
+
+const TABS: readonly TabDef[] = [
   { label: "모델 카탈로그", value: "catalog", path: "/catalog" },
   { label: "생성하기", value: "create", path: "/generate" },
   { label: "히스토리", value: "history", path: "/history" },
-] as const;
+  { label: "요금제", value: "pricing", path: null },
+];
 
 type AuthGNBProps = {
-  activeTab?: "catalog" | "create" | "history";
+  activeTab?: "catalog" | "create" | "history" | "pricing";
 };
 
 const CLOSE_IGNORE_MS = 150;
@@ -69,12 +77,16 @@ export function AuthGNB({ activeTab }: AuthGNBProps = {}) {
 
   const resolvedActiveTab =
     activeTab ??
-    TABS.find((tab) => pathname?.startsWith(tab.path))?.value ??
-    "catalog";
+    TABS.find((tab) => tab.path && pathname?.startsWith(tab.path))?.value;
+
+  // 비로그인 시: 히스토리 숨기고 요금제 노출. 로그인 시: 요금제 숨기고 히스토리 노출
+  const visibleTabs = isLoggedIn
+    ? TABS.filter((tab) => tab.value !== "pricing")
+    : TABS.filter((tab) => tab.value !== "history");
 
   const handleTabClick = (value: string) => {
     const tab = TABS.find((t) => t.value === value);
-    if (tab) router.push(tab.path);
+    if (tab?.path) router.push(tab.path);
   };
 
   const handleLogout = () => {
@@ -180,7 +192,7 @@ export function AuthGNB({ activeTab }: AuthGNBProps = {}) {
   return (
     <GNB
       state={isLoggedIn ? "login" : "logout"}
-      tabs={TABS.map(({ label, value }) => ({ label, value }))}
+      tabs={visibleTabs.map(({ label, value }) => ({ label, value }))}
       activeTab={resolvedActiveTab}
       onTabClick={handleTabClick}
       onLoginClick={() => router.push("/login")}

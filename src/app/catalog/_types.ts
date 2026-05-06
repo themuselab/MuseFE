@@ -2,7 +2,7 @@ export type TopModel = {
   id: string;
   rank: number;
   name: string;
-  tags: [string, string];
+  tags: string[];
   imageUrl: string | null;
 };
 
