@@ -24,7 +24,7 @@ export type Model = {
   recommendedIndustries: string[];
 };
 
-export type SortOption = "recommend" | "latest";
+export type SortOption = "recommend" | "popular";
 
 export type GenderFilter = "all" | "female" | "male";
 

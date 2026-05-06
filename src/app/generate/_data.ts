@@ -10,8 +10,8 @@ export const RADAR_AXES: { key: RadarAxis; label: string }[] = [
 ];
 
 export const SORT_OPTIONS: { label: string; value: SortOption }[] = [
-  { label: "추천순", value: "recommend" },
-  { label: "최신순", value: "latest" },
+  { label: "최신순", value: "recommend" },
+  { label: "인기순", value: "popular" },
 ];
 
 export const IMPRESSION_OPTIONS = [

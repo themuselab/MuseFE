@@ -76,7 +76,7 @@ export function ModelStatsBar({ total, sort, onSortChange }: ModelStatsBarProps)
         items={SORT_OPTIONS.map((o) => ({ label: o.label, value: o.value }))}
         value={sort}
         onChange={(v) => {
-          if (v === "recommend" || v === "latest") onSortChange(v);
+          if (v === "recommend" || v === "popular") onSortChange(v);
         }}
       />
     </div>
