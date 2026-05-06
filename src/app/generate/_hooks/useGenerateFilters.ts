@@ -31,6 +31,8 @@ export function useGenerateFilters() {
   const setImpression = (impression: ImpressionFilter) =>
     setFilters((prev) => ({ ...prev, impression }));
 
+  const setAll = (next: FilterState) => setFilters(next);
+
   const reset = () => setFilters(INITIAL_STATE);
 
   return {
@@ -43,8 +45,10 @@ export function useGenerateFilters() {
     setGender,
     setAge,
     setImpression,
+    setAll,
     reset,
     openModal,
     closeModal,
+    INITIAL_FILTERS: INITIAL_STATE,
   };
 }

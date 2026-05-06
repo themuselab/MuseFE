@@ -36,11 +36,14 @@ export type ListTopCatalogModelsResponse = {
   items: CatalogTopModelDto[];
 };
 
+export type CatalogSort = "recommend" | "popular";
+
 export type CatalogFilter = {
   gender?: GenderFilter;
   age?: AgeFilter;
   primaryLabel?: ImpressionFilter;
   keyword?: string;
+  sort?: CatalogSort;
 };
 
 // ─────────────────────────── Mood ───────────────────────────

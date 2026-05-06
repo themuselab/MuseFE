@@ -47,12 +47,10 @@ export default function GeneratePage() {
     modalOpen,
     setKeyword,
     setSort,
-    setGender,
-    setAge,
-    setImpression,
-    reset,
+    setAll,
     openModal,
     closeModal,
+    INITIAL_FILTERS,
   } = useGenerateFilters();
 
   const catalogQuery = useCatalogModels({
@@ -60,6 +58,7 @@ export default function GeneratePage() {
     age: filters.age,
     primaryLabel: filters.impression,
     keyword,
+    sort,
   });
 
   const topQuery = useTopCatalogModels();
@@ -126,14 +125,15 @@ export default function GeneratePage() {
 
       <FilterModal
         open={modalOpen}
-        filters={filters}
-        matchCount={total}
+        appliedFilters={filters}
+        initialFilters={INITIAL_FILTERS}
+        sort={sort}
+        keyword={keyword}
         onClose={closeModal}
-        onGenderChange={setGender}
-        onAgeChange={setAge}
-        onImpressionChange={setImpression}
-        onReset={reset}
-        onApply={closeModal}
+        onCommit={(next) => {
+          setAll(next);
+          closeModal();
+        }}
       />
     </div>
   );

@@ -16,6 +16,7 @@ const buildQuery = (filter?: CatalogFilter): string => {
   if (filter.keyword && filter.keyword.trim().length > 0) {
     params.set("keyword", filter.keyword.trim());
   }
+  if (filter.sort) params.set("sort", filter.sort);
   const q = params.toString();
   return q ? `?${q}` : "";
 };
