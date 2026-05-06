@@ -3,6 +3,7 @@
 import { toPng } from "html-to-image";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { adsApi } from "@/api/ads";
 import { useAdJob } from "@/hooks/useAdJob";
 import { useAuthenticatedImage } from "@/hooks/useAuthenticatedImage";
 import { AD_CREATE_KEYS } from "@/constants/app";
@@ -14,6 +15,16 @@ import { ResultActions } from "./_components/ResultActions";
 import { ResultGallery } from "./_components/ResultGallery";
 import { ResultHeader } from "./_components/ResultHeader";
 import { useEditorState } from "./_hooks/useEditorState";
+import type { Layer, TextLayer } from "./_types";
+
+const isTextLayer = (l: Layer): l is TextLayer => l.type === "text";
+
+const findLayerContent = (layers: Layer[], overlayId: string): string => {
+  const match = layers.find(
+    (l) => isTextLayer(l) && l.id.startsWith(`overlay-${overlayId}-`),
+  );
+  return match && isTextLayer(match) ? match.content : "";
+};
 
 export default function ResultPage() {
   const params = useParams<{ modelId: string }>();
@@ -30,13 +41,26 @@ export default function ResultPage() {
   }, [params.modelId, router]);
 
   const job = useAdJob(jobId);
+  // 첫 생성 결과(좌측 카드 — 절대 변경 X). 미존재(legacy) 시 resultUrl로 fallback.
+  const originalResultUrl =
+    job.data?.originalResultUrl ?? job.data?.resultUrl ?? null;
+  // 최신 결과(우측 카드 — 재편집마다 갱신). 캔버스 캡처 미리보기는 editedSrc state로 우선 적용.
   const resultUrl = job.data?.resultUrl ?? null;
-  const { blobUrl, error: imageError } = useAuthenticatedImage(resultUrl);
+  const baseUrl = job.data?.baseImageUrl ?? null;
+  const { blobUrl: originalBlobUrl, error: imageError } =
+    useAuthenticatedImage(originalResultUrl);
+  const { blobUrl: latestBlobUrl } = useAuthenticatedImage(resultUrl);
+  // 편집 모드 캔버스 배경: 텍스트 없는 base 이미지 (재편집 시 텍스트 중복 방지)
+  const { blobUrl: baseBlobUrl } = useAuthenticatedImage(baseUrl);
 
   const [isEditing, setIsEditing] = useState(false);
   const [editedSrc, setEditedSrc] = useState<string | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
   const canvasRef = useRef<HTMLDivElement | null>(null);
-  const editor = useEditorState(blobUrl ?? "", job.data?.textOverlays ?? null);
+  // 편집 모드: baseBlobUrl(텍스트 없는 깨끗한 이미지) 우선, 없으면 blobUrl(폴백)
+  const editorImageSrc = baseBlobUrl ?? latestBlobUrl ?? originalBlobUrl ?? "";
+  const editor = useEditorState(editorImageSrc, job.data?.textOverlays ?? null);
 
   const captureCanvas = async (): Promise<string | null> => {
     if (!canvasRef.current) return null;
@@ -47,9 +71,43 @@ export default function ResultPage() {
   };
 
   const handleEditDone = async () => {
+    if (!jobId) {
+      setIsEditing(false);
+      return;
+    }
+
+    // 1) 캔버스 합성 결과를 즉시 미리보기로 보존 (BE 갱신까지 깜빡임 방지)
     const dataUrl = await captureCanvas();
     if (dataUrl) setEditedSrc(dataUrl);
-    setIsEditing(false);
+
+    // 2) BE 재합성 호출 — GPT 미호출, PIL만 (비용 0¢)
+    const headline = findLayerContent(editor.state.layers, "headline");
+    if (!headline) {
+      setIsEditing(false);
+      return;
+    }
+    const subhead = findLayerContent(editor.state.layers, "subhead");
+    const cta = findLayerContent(editor.state.layers, "cta");
+
+    setIsSaving(true);
+    setSaveError(null);
+    try {
+      const res = await adsApi.reOverlay(jobId, {
+        headline,
+        subhead: subhead || undefined,
+        cta: cta || undefined,
+      });
+      if (!res.success) {
+        setSaveError(res.error.message);
+      } else {
+        await job.refetch();
+      }
+    } catch (err) {
+      setSaveError(err instanceof Error ? err.message : "재합성 실패");
+    } finally {
+      setIsSaving(false);
+      setIsEditing(false);
+    }
   };
 
   const handleCreateNew = () => {
@@ -69,7 +127,8 @@ export default function ResultPage() {
   };
 
   const downloadOriginal = async () => {
-    const src = editedSrc ?? blobUrl;
+    // 다운로드는 우측(편집본) 우선 — 사용자가 마지막으로 본 결과
+    const src = editedSrc ?? latestBlobUrl ?? originalBlobUrl;
     if (!src) return;
     if (src.startsWith("data:")) {
       triggerDownload(src);
@@ -112,7 +171,7 @@ export default function ResultPage() {
     );
   }
 
-  if (!blobUrl) {
+  if (!originalBlobUrl) {
     return (
       <div className="min-h-screen flex flex-col bg-neutral-50">
         <CreateFlowGNB
@@ -132,16 +191,29 @@ export default function ResultPage() {
       <CreateFlowGNB
         currentStep={3}
         completedSteps={[1, 2, 3]}
-        onBack={isEditing ? () => setIsEditing(false) : () => router.back()}
+        onBack={
+          isEditing
+            ? () => {
+                if (!isSaving) setIsEditing(false);
+              }
+            : () => router.back()
+        }
         rightSlot={
           isEditing ? (
             <EditorActions
               onDone={handleEditDone}
               onDownload={downloadComposite}
+              isSaving={isSaving}
             />
           ) : null
         }
       />
+
+      {saveError ? (
+        <div className="bg-error-50 text-error-600 text-caption-m px-6 py-2 text-center">
+          저장 실패: {saveError}
+        </div>
+      ) : null}
 
       {isEditing ? (
         <main className="flex-1 max-w-[1440px] w-full mx-auto px-6 lg:px-30 py-8 lg:py-15 flex flex-col lg:flex-row gap-10">
@@ -157,10 +229,10 @@ export default function ResultPage() {
         <main className="flex-1 max-w-[1440px] w-full mx-auto px-6 lg:px-30 py-8 lg:py-15 pb-30 flex flex-col gap-10">
           <ResultHeader />
           <ResultGallery
-            src={blobUrl}
+            originalSrc={originalBlobUrl}
+            editedSrc={editedSrc ?? latestBlobUrl}
             alt="생성된 광고 이미지"
             onEditText={() => setIsEditing(true)}
-            editedSecondSrc={editedSrc}
           />
           <ResultActions
             onCreateNew={handleCreateNew}
