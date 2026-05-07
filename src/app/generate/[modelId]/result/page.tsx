@@ -110,6 +110,10 @@ export default function ResultPage() {
         setSaveError(res.error.message);
       } else {
         await job.refetch();
+        // 캔버스 캡처(editedSrc)는 BE 응답 대기용 즉시 미리보기일 뿐.
+        // BE refetch로 latestBlobUrl이 최신이 됐으니 stale dataURL을 비워
+        // 갤러리·다운로드가 BE 결과를 사용하도록 한다.
+        setEditedSrc(null);
       }
     } catch (err) {
       setSaveError(err instanceof Error ? err.message : "재합성 실패");
@@ -136,8 +140,10 @@ export default function ResultPage() {
   };
 
   const downloadOriginal = async () => {
-    // 다운로드는 우측(편집본) 우선 — 사용자가 마지막으로 본 결과
-    const src = editedSrc ?? latestBlobUrl ?? originalBlobUrl;
+    // 다운로드 우선순위: BE 최신 결과(latestBlobUrl) > 캔버스 즉시 캡처(editedSrc) > 원본.
+    // editedSrc는 PIL 재오버레이 응답 직전의 즉시 미리보기일 뿐이라 폰트·로고 렌더가
+    // BE 최종본과 다를 수 있어 후순위로 둔다.
+    const src = latestBlobUrl ?? editedSrc ?? originalBlobUrl;
     if (!src) return;
     if (src.startsWith("data:")) {
       triggerDownload(src);
