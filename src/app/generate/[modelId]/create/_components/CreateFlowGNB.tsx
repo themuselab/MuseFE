@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import type { ReactNode } from "react";
+import { AuthGNB } from "@/components/AuthGNB";
 import { CreateStepper } from "./CreateStepper";
 
 type CreateFlowGNBProps = {
@@ -41,23 +42,30 @@ export function CreateFlowGNB({
   const handleBack = onBack ?? (() => router.back());
 
   return (
-    <header className="sticky top-0 z-30 h-20 lg:h-22 bg-neutral-50 border-b border-neutral-100">
-      <div className="h-full max-w-[1440px] mx-auto px-6 lg:px-30 flex items-center justify-between gap-4">
-        <button
-          type="button"
-          onClick={handleBack}
-          aria-label="뒤로 가기"
-          className="cursor-pointer text-neutral-900 flex items-center justify-center"
-        >
-          <ChevronLeftIcon />
-        </button>
+    <>
+      <AuthGNB activeTab="create" />
+      <header className="h-20 lg:h-22 bg-neutral-50 border-b border-neutral-100">
+        <div className="h-full max-w-[1440px] mx-auto px-6 lg:px-30 flex items-center justify-between gap-4">
+          <button
+            type="button"
+            onClick={handleBack}
+            aria-label="뒤로 가기"
+            className="cursor-pointer text-neutral-900 flex items-center gap-1 shrink-0"
+          >
+            <ChevronLeftIcon />
+            <span className="text-body-l">뒤로가기</span>
+          </button>
 
-        <div className="overflow-x-auto">
-          <CreateStepper currentStep={currentStep} completedSteps={completedSteps} />
+          <div className="flex items-center gap-4 shrink-0">
+            <div className="overflow-x-auto">
+              <CreateStepper currentStep={currentStep} completedSteps={completedSteps} />
+            </div>
+            {rightSlot ? (
+              <div className="flex items-center gap-3 shrink-0">{rightSlot}</div>
+            ) : null}
+          </div>
         </div>
-
-        <div className="flex items-center gap-3 shrink-0">{rightSlot}</div>
-      </div>
-    </header>
+      </header>
+    </>
   );
 }
