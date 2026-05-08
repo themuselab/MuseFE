@@ -104,6 +104,7 @@ export default function GeneratePage() {
 
         <ModelFilterBar
           keyword={keyword}
+          filters={filters}
           onKeywordChange={setKeyword}
           onFilterOpen={openModal}
         />
