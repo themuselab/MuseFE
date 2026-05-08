@@ -1,11 +1,14 @@
 "use client";
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/Button";
 import { RadarChart } from "./RadarChart";
 import { HeroBanner } from "./HeroBanner";
 
 export function HeroSection() {
+  const router = useRouter();
+
   return (
     <section className="relative w-full bg-neutral-50 overflow-hidden">
       {/* 배너 */}
@@ -49,10 +52,20 @@ export function HeroSection() {
 
             {/* CTA 버튼 */}
             <div className="flex items-center gap-3">
-              <Button hierarchy="accent" size="large" className="shrink-0 whitespace-nowrap">
+              <Button
+                hierarchy="accent"
+                size="large"
+                className="shrink-0 whitespace-nowrap"
+                onClick={() => router.push("/generate")}
+              >
                 지금 바로 광고 생성하기
               </Button>
-              <Button hierarchy="secondary" size="large" className="shrink-0 whitespace-nowrap">
+              <Button
+                hierarchy="secondary"
+                size="large"
+                className="shrink-0 whitespace-nowrap"
+                onClick={() => router.push("/catalog")}
+              >
                 모델 카탈로그 보기
               </Button>
             </div>

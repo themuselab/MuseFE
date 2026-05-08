@@ -5,6 +5,7 @@ export type PreRegistrationRequest = {
   phone?: string;
   privacyAgreed: true;
   marketingAgreed: boolean;
+  source?: "signup_waitlist" | "landing_cta";
 };
 
 export type PreRegistrationResponse = {
