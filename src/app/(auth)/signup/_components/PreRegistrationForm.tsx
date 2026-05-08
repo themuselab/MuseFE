@@ -8,7 +8,7 @@ import {
   PRE_REGISTRATION_PRIVACY_AGREEMENT,
   PRE_REGISTRATION_MARKETING_AGREEMENT,
 } from "@/constants/app";
-import { usePreRegistration } from "../_hooks/usePreRegistration";
+import { usePreRegistration } from "@/hooks/usePreRegistration";
 import type { PreRegistrationResponse } from "@/api/preRegistration";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
