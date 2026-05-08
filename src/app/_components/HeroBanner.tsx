@@ -22,7 +22,7 @@ export function HeroBanner() {
         </div>
 
         {/* 우측 쿠폰 카드 */}
-        <div className="right-upload-card-sm absolute max-md:right-6">
+        <div className="absolute top-0 right-20 max-md:hidden">
           <Image
             src="/images/landing/early-bird.png"
             width={213}
