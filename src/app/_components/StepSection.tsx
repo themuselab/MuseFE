@@ -18,21 +18,6 @@ const STEP2_IMAGES = [
   { src: "/images/landing/step2/front.png", alt: "정면 모델", x: 83, y: 74, w: 135, h: 242, rotate: 0, shadow: true },
 ];
 
-function GradientDot() {
-  return (
-    <div
-      className="absolute w-[3.8px] h-[3.35px] rounded-full"
-      style={{
-        background: "linear-gradient(270deg, #862D8F 0%, #E6196B 100%)",
-        boxShadow: "0 1px 3.5px #FFD1E3, 0 4px 3.5px #fff",
-        filter: "blur(0.26px)",
-        bottom: "20px",
-        right: "28px",
-      }}
-    />
-  );
-}
-
 export function StepSection() {
   return (
     <section className="w-full bg-neutral-50">
@@ -55,7 +40,7 @@ export function StepSection() {
         {/* STEP 카드 3개 */}
         <div className="flex gap-10 w-full max-md:flex-col">
           {/* STEP 01 */}
-          <div className="relative flex-1 flex flex-col items-center gap-9 rounded-xl border border-neutral-200 shadow-[0_1px_3.5px_rgba(0,0,0,0.13)] bg-neutral-50 pt-10 pb-5 px-7">
+          <div className="flex-1 flex flex-col items-center gap-9 rounded-xl border border-neutral-200 shadow-[0_1px_3.5px_rgba(0,0,0,0.13)] bg-neutral-50 pt-10 pb-5 px-7">
             <div className="flex flex-col gap-4 w-full">
               <span className="text-label-l text-pink-400 tracking-[0.032em]">
                 STEP 01
@@ -80,7 +65,6 @@ export function StepSection() {
                 />
               ))}
             </div>
-            <GradientDot />
           </div>
 
           {/* STEP 02 — 다크 */}
@@ -119,7 +103,7 @@ export function StepSection() {
           </div>
 
           {/* STEP 03 */}
-          <div className="relative flex-1 flex flex-col items-center gap-9 rounded-xl border border-neutral-200 shadow-[0_1px_3.5px_rgba(0,0,0,0.13)] bg-neutral-50 pt-10 pb-5 px-7">
+          <div className="flex-1 flex flex-col items-center gap-9 rounded-xl border border-neutral-200 shadow-[0_1px_3.5px_rgba(0,0,0,0.13)] bg-neutral-50 pt-10 pb-5 px-7">
             <div className="flex flex-col gap-4 w-full">
               <span className="text-label-l text-pink-400 tracking-[0.032em]">
                 STEP 03
@@ -138,7 +122,6 @@ export function StepSection() {
               alt="제품 합성 결과"
               className="w-full max-w-[320px] h-[420px] rounded-lg object-cover"
             />
-            <GradientDot />
           </div>
         </div>
       </div>
