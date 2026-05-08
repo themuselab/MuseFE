@@ -53,10 +53,10 @@ export default function ProductUploadPage() {
   const errorMessage = status.kind === "error" ? status.message : null;
 
   const handleNext = () => {
-    if (!productImagePath) return;
+    if (isLoading) return;
     sessionStorage.setItem(
       AD_CREATE_KEYS.product(model.id),
-      JSON.stringify({ productImagePath }),
+      JSON.stringify(productImagePath ? { productImagePath } : {}),
     );
     router.push(`/generate/${model.id}/generating`);
   };
@@ -87,7 +87,7 @@ export default function ProductUploadPage() {
       </main>
 
       <CreateFooter
-        canSubmit={Boolean(productImagePath) && !isLoading}
+        canSubmit={!isLoading}
         onSubmit={handleNext}
       />
     </div>
