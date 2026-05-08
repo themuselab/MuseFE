@@ -210,34 +210,39 @@ export function StepBasicInfo({ formData, onUpdate, onNext, onPrev, isGoogleFlow
 
         {/* Age group */}
         <div className="flex flex-col gap-3 w-full">
-          <div className="relative flex items-center gap-1">
+          <div className="flex items-center gap-1">
             <span className="text-caption-m text-neutral-700">연령대</span>
-            <button
-              type="button"
-              onClick={() => setShowAgeTooltip((prev) => !prev)}
-              className="cursor-pointer shrink-0"
-            >
-              <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                <circle cx="9" cy="9" r="7" stroke="#534B4F" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M6.75 6.75C6.75 5.50736 7.75736 4.5 9 4.5C10.2426 4.5 11.25 5.50736 11.25 6.75C11.25 7.99264 10.2426 9 9 9V10.5" stroke="#534B4F" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                <circle cx="9" cy="13.5" r="0.5" fill="#534B4F" />
-              </svg>
-            </button>
-            {showAgeTooltip && (
-              <div className="absolute left-0 top-full mt-1.5 z-10 w-72.75 h-16.75">
-                <svg width="291" height="67" viewBox="0 0 291 67" fill="none" className="absolute inset-0">
-                  <path
-                    d="M0 14H26.22L34 0L41.78 14H291V67H0V14Z"
-                    fill="#201D1F"
-                  />
+            <div className="relative shrink-0">
+              <button
+                type="button"
+                onClick={() => setShowAgeTooltip((prev) => !prev)}
+                className="cursor-pointer block"
+              >
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                  <circle cx="9" cy="9" r="7" stroke="#534B4F" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M6.75 6.75C6.75 5.50736 7.75736 4.5 9 4.5C10.2426 4.5 11.25 5.50736 11.25 6.75C11.25 7.99264 10.2426 9 9 9V10.5" stroke="#534B4F" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  <circle cx="9" cy="13.5" r="0.5" fill="#534B4F" />
                 </svg>
-                <div className="absolute left-0 right-0 top-3.5 bottom-0 flex items-center px-3.5">
-                  <span className="text-[14px] font-medium leading-[1.14] text-neutral-50">
-                    연령대에 맞는 맞춤형 콘텐츠를 추천해 드릴게요.
-                  </span>
+              </button>
+              {showAgeTooltip && (
+                <div
+                  className="absolute top-full mt-1.5 z-10 w-72.75 h-16.75"
+                  style={{ left: "calc(50% - 34px)" }}
+                >
+                  <svg width="291" height="67" viewBox="0 0 291 67" fill="none" className="absolute inset-0">
+                    <path
+                      d="M0 14H26.22L34 0L41.78 14H291V67H0V14Z"
+                      fill="#201D1F"
+                    />
+                  </svg>
+                  <div className="absolute left-0 right-0 top-3.5 bottom-0 flex items-center px-3.5">
+                    <span className="text-[14px] font-medium leading-[1.14] text-neutral-50">
+                      연령대에 맞는 맞춤형 콘텐츠를 추천해 드릴게요.
+                    </span>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
           <div className="flex flex-wrap items-center gap-2">
             {AGE_GROUPS.map((group) => {
