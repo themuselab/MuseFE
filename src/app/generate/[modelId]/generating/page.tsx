@@ -4,6 +4,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useGenerateAd } from "@/hooks/useGenerateAd";
 import { useAdJob } from "@/hooks/useAdJob";
+import { useActiveAdJob } from "@/lib/ActiveAdJobProvider";
 import { AD_CREATE_KEYS, industryLabelOf } from "@/constants/app";
 import { CreateFlowGNB } from "../create/_components/CreateFlowGNB";
 import { CancelGenerationModal } from "./_components/CancelGenerationModal";
@@ -22,6 +23,7 @@ export default function GeneratingPage() {
 
   const generate = useGenerateAd();
   const job = useAdJob(jobId);
+  const { startJob, clearJob } = useActiveAdJob();
 
   // 진입 시 한 번만 generate 호출
   useEffect(() => {
@@ -32,6 +34,11 @@ export default function GeneratingPage() {
     const cached = sessionStorage.getItem(AD_CREATE_KEYS.job(params.modelId));
     if (cached) {
       setJobId(cached);
+      startJob({
+        jobId: cached,
+        modelId: params.modelId,
+        itemName: ctx.flow.itemName,
+      });
       return;
     }
 
@@ -43,7 +50,9 @@ export default function GeneratingPage() {
     generate.mutate(
       {
         catalogModelId: params.modelId,
-        productImagePath: ctx.product.productImagePath,
+        ...(ctx.product.productImagePath
+          ? { productImagePath: ctx.product.productImagePath }
+          : {}),
         prompt: promptParts.join(", "),
         industry: industryLabelOf(ctx.flow.industry),
         item: ctx.flow.itemName,
@@ -59,6 +68,11 @@ export default function GeneratingPage() {
             data.jobId,
           );
           setJobId(data.jobId);
+          startJob({
+            jobId: data.jobId,
+            modelId: params.modelId,
+            itemName: ctx.flow.itemName,
+          });
         },
         onError: (err) => {
           setSubmitError(
@@ -94,7 +108,13 @@ export default function GeneratingPage() {
     sessionStorage.removeItem(AD_CREATE_KEYS.flow(params.modelId));
     sessionStorage.removeItem(AD_CREATE_KEYS.product(params.modelId));
     sessionStorage.removeItem(AD_CREATE_KEYS.job(params.modelId));
+    clearJob();
     router.replace("/");
+  };
+
+  const handleGoHome = () => {
+    // 백그라운드 생성 유지 — sessionStorage/activeJob 정리 X, 즉시 메인으로
+    router.push("/");
   };
 
   return (
@@ -114,7 +134,7 @@ export default function GeneratingPage() {
               {failMessage}
             </p>
           ) : null}
-          <GenerationActions onCancel={openCancel} onGoHome={openCancel} />
+          <GenerationActions onCancel={openCancel} onGoHome={handleGoHome} />
         </div>
       </main>
 

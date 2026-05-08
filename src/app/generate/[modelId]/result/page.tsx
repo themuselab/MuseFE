@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { adsApi } from "@/api/ads";
 import { useAdJob } from "@/hooks/useAdJob";
 import { useAuthenticatedImage } from "@/hooks/useAuthenticatedImage";
+import { useActiveAdJob } from "@/lib/ActiveAdJobProvider";
 import { AD_CREATE_KEYS } from "@/constants/app";
 import { CreateFlowGNB } from "../create/_components/CreateFlowGNB";
 import { EditorActions } from "./_components/EditorActions";
@@ -31,6 +32,12 @@ export default function ResultPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [jobId, setJobId] = useState<string | null>(null);
+  const { clearJob } = useActiveAdJob();
+
+  // 결과 진입 시 전역 토스트 정리 (보러가기 외 경로로 도달 안전망)
+  useEffect(() => {
+    clearJob();
+  }, [clearJob]);
 
   useEffect(() => {
     // 1) 히스토리에서 ?jobId=... 로 진입한 경우 — 쿼리 우선, sessionStorage에도 동기화

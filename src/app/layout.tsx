@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { QueryProvider } from "@/lib/QueryProvider";
 import { AuthProvider } from "@/lib/AuthProvider";
+import { ActiveAdJobProvider } from "@/lib/ActiveAdJobProvider";
+import { GlobalAdJobToast } from "@/components/GlobalAdJobToast";
 import "./globals.css";
 
 const pretendard = localFont({
@@ -47,7 +49,12 @@ export default function RootLayout({
       </head>
       <body>
         <QueryProvider>
-          <AuthProvider>{children}</AuthProvider>
+          <AuthProvider>
+            <ActiveAdJobProvider>
+              {children}
+              <GlobalAdJobToast />
+            </ActiveAdJobProvider>
+          </AuthProvider>
         </QueryProvider>
       </body>
     </html>

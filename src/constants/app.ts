@@ -132,3 +132,14 @@ export const AD_CREATE_KEYS = {
 
 // 카탈로그 진입 시 비회원에게 노출되는 WelcomeModal "다시 보지 않기" 영구 플래그
 export const WELCOME_MODAL_DISMISSED_KEY = "muse:welcomeModalDismissed";
+
+// 전역 광고 생성 토스트 — 활성 작업 정보 sessionStorage 키
+export const ACTIVE_AD_JOB_KEY = "muse:activeAdJob";
+
+// 전역 광고 생성 토스트 텍스트
+export const AD_JOB_TOAST = {
+  progressText: (itemName: string) => `${itemName} 광고 이미지 제작 중...`,
+  errorText: (itemName: string) => `${itemName} 광고 이미지 생성에 실패했어요`,
+  completeText: "광고 이미지가 준비됐어요!",
+  ctaText: "보러가기",
+} as const;
