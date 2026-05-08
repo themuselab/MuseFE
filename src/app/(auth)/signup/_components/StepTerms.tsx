@@ -1,7 +1,10 @@
 "use client";
 
+import { useState } from "react";
 import { Checkbox } from "@/components/Checkbox";
 import { Button } from "@/components/Button";
+import { TermsModal } from "./TermsModal";
+import type { SignupTermKey } from "@/constants/signupTerms";
 
 type TermsData = {
   service: boolean;
@@ -63,6 +66,8 @@ export function StepTerms({
   onNext,
   onPrev,
 }: StepTermsProps) {
+  const [openTermKey, setOpenTermKey] = useState<SignupTermKey | null>(null);
+
   return (
     <>
       <div className="flex flex-col items-center w-full gap-10">
@@ -121,6 +126,7 @@ export function StepTerms({
                 </div>
                 <button
                   type="button"
+                  onClick={() => setOpenTermKey(item.key)}
                   className="text-[14px] font-normal leading-none text-neutral-700 cursor-pointer shrink-0"
                 >
                   보기
@@ -149,6 +155,11 @@ export function StepTerms({
           다음 단계로
         </Button>
       </div>
+
+      <TermsModal
+        termKey={openTermKey}
+        onClose={() => setOpenTermKey(null)}
+      />
     </>
   );
 }

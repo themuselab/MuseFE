@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import { createPortal } from "react-dom";
 import { CloseIcon } from "@/components/icons/CloseIcon";
 
 type ModalShellSize = "sm" | "md" | "lg" | "xl";
@@ -52,6 +53,11 @@ export function ModalShell({
 }: ModalShellProps) {
   const cardRef = useRef<HTMLDivElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (!open) return;
@@ -78,9 +84,9 @@ export function ModalShell({
     };
   }, [open, closeOnEscape, onClose]);
 
-  if (!open) return null;
+  if (!open || !mounted) return null;
 
-  return (
+  return createPortal(
     <div
       className={`fixed inset-0 z-50 bg-neutral-900/40 flex justify-center ${mobileWrapperClass[mobileStyle]}`}
       onClick={closeOnBackdropClick ? onClose : undefined}
@@ -114,6 +120,7 @@ export function ModalShell({
 
         {children}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
