@@ -40,7 +40,6 @@ export function BusinessInfoSection({
         label="사업자명"
         value={businessName}
         onChange={(e) => onBusinessNameChange(e.target.value)}
-        placeholder="예: 네이버"
       />
 
       <div className="flex flex-col gap-2">
