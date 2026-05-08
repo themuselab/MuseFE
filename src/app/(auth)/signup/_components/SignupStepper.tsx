@@ -1,5 +1,6 @@
 "use client";
 
+import { Fragment } from "react";
 import type { SignupStep } from "../_types";
 
 type SignupStepperProps = {
@@ -34,20 +35,15 @@ export function SignupStepper({ currentStep, isGoogleFlow }: SignupStepperProps)
         const label = STEP_LABELS[stepNum - 1];
 
         return (
-          <div key={stepNum} className="flex items-center flex-1 last:flex-none">
-            {/* Step circle */}
+          <Fragment key={stepNum}>
             {isCompleted ? (
               <div className="w-9 h-9 rounded-full bg-pink-400 flex items-center justify-center shrink-0">
                 <CheckIcon />
               </div>
             ) : isCurrent ? (
               <div className="flex items-center gap-2 h-9 rounded-full border border-pink-400 bg-neutral-50 px-3 shrink-0">
-                <span className="text-heading-s text-pink-400">
-                  {stepNum}
-                </span>
-                <span className="text-heading-xs text-pink-400">
-                  {label}
-                </span>
+                <span className="text-heading-s text-pink-400">{stepNum}</span>
+                <span className="text-heading-xs text-pink-400">{label}</span>
               </div>
             ) : (
               <div className="w-9 h-9 rounded-full border border-neutral-200 bg-neutral-50 flex items-center justify-center shrink-0">
@@ -57,11 +53,10 @@ export function SignupStepper({ currentStep, isGoogleFlow }: SignupStepperProps)
               </div>
             )}
 
-            {/* Connector line */}
             {idx < steps.length - 1 && (
-              <div className="flex-1 h-px bg-neutral-200 mx-0" />
+              <div className="flex-1 h-px bg-neutral-200" />
             )}
-          </div>
+          </Fragment>
         );
       })}
     </div>
