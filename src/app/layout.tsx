@@ -14,6 +14,7 @@ const pretendard = localFont({
 export const metadata: Metadata = {
   title: "Muse",
   description: "Muse",
+  manifest: "/site.webmanifest",
 };
 
 export default function RootLayout({
