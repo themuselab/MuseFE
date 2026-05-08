@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { Dropdown } from "@/components/Dropdown";
-import { TextField } from "@/components/TextField";
 import { Button } from "@/components/Button";
 import { signupBusinessSchema } from "@/lib/validation";
 import { INDUSTRY_MAIN_OPTIONS, BUSINESS_DURATION_OPTIONS } from "@/constants/app";
@@ -80,10 +79,12 @@ export function StepBusinessInfo({
           {/* Business Name */}
           <div className="flex flex-col gap-1.5 w-full">
             <span className="text-caption-m text-neutral-700">사업자명</span>
-            <TextField
-              label="예: 네이버"
+            <input
+              type="text"
+              placeholder="예: 네이버"
               value={business.businessName}
               onChange={(e) => onUpdate("businessName", e.target.value)}
+              className="w-full rounded-lg border border-neutral-200 bg-neutral-50 px-4 py-3 text-body-m text-neutral-900 placeholder:text-neutral-400 focus:border-pink-400 focus:outline-none transition-colors"
             />
           </div>
 
