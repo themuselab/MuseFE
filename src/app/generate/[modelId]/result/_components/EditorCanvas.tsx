@@ -4,9 +4,8 @@ import Image from "next/image";
 import { type RefObject } from "react";
 import { FONT_VAR_BY_KEY } from "../_constants";
 import type { EditorAPI } from "../_hooks/useEditorState";
-import { EDITOR_IMAGE_LAYER_ID } from "../_hooks/useEditorState";
 import { usePointerTransform } from "../_hooks/usePointerTransform";
-import type { ImageLayer, Layer, ResizeHandle, TextLayer } from "../_types";
+import type { Layer, ResizeHandle, TextLayer } from "../_types";
 
 type EditorCanvasProps = {
   api: EditorAPI;
@@ -59,30 +58,19 @@ export function EditorCanvas({ api, canvasRef }: EditorCanvasProps) {
       >
         {state.layers.map((layer) =>
           layer.type === "image" ? (
-            <LayerView
+            <div
               key={layer.id}
-              layer={layer}
-              isImage
-              selected={state.selectedId === layer.id}
-              onPointerDown={(e) => transform.begin(e, layer, "move")}
-              onPointerMove={transform.move}
-              onPointerUp={transform.end}
-              onPointerCancel={transform.end}
-              onResizeBegin={(e, h) => transform.begin(e, layer, "resize", h)}
-              onRotateBegin={(e) => transform.begin(e, layer, "rotate")}
-              onDelete={() => deleteLayer(layer.id)}
-              canDelete={false}
-              canRotate={false}
+              className="absolute inset-0 pointer-events-none"
             >
               <Image
                 src={layer.src}
                 alt="결과 이미지"
                 fill
                 draggable={false}
-                className="object-cover pointer-events-none"
+                className="object-cover"
                 sizes="(min-width: 1024px) 507px, 100vw"
               />
-            </LayerView>
+            </div>
           ) : (
             <LayerView
               key={layer.id}
@@ -110,7 +98,6 @@ export function EditorCanvas({ api, canvasRef }: EditorCanvasProps) {
 type LayerViewProps = {
   layer: Layer;
   selected: boolean;
-  isImage?: boolean;
   canDelete: boolean;
   canRotate: boolean;
   onPointerDown: (e: React.PointerEvent) => void;
@@ -126,7 +113,6 @@ type LayerViewProps = {
 function LayerView({
   layer,
   selected,
-  isImage,
   canDelete,
   canRotate,
   onPointerDown,
@@ -145,13 +131,8 @@ function LayerView({
       onPointerUp={onPointerUp}
       onPointerCancel={onPointerCancel}
       className={[
-        "absolute origin-center",
-        selected
-          ? "outline outline-2 outline-pink-400 outline-offset-[-2px]"
-          : isImage
-            ? ""
-            : "",
-        isImage ? "" : "cursor-move",
+        "absolute origin-center cursor-move",
+        selected ? "outline-2 outline-pink-400 -outline-offset-2" : "",
       ].join(" ")}
       style={{
         left: `${layer.x}%`,
@@ -227,5 +208,3 @@ function TextContent({ layer }: { layer: TextLayer }) {
   );
 }
 
-void EDITOR_IMAGE_LAYER_ID;
-void ({} as ImageLayer);

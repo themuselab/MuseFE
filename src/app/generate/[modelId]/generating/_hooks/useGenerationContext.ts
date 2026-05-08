@@ -6,7 +6,7 @@ import { AD_CREATE_KEYS } from "@/constants/app";
 import type { AdInfoFormState } from "../../create/_types";
 
 export type AdCreateProductPayload = {
-  productImagePath: string;
+  productImagePath?: string;
 };
 
 export type GenerationContext = {
@@ -39,7 +39,8 @@ function isAdInfoFormState(value: unknown): value is AdInfoFormState {
 function isProductPayload(value: unknown): value is AdCreateProductPayload {
   if (typeof value !== "object" || value === null) return false;
   const obj = value as Record<string, unknown>;
-  return typeof obj.productImagePath === "string" && obj.productImagePath.length > 0;
+  if (obj.productImagePath === undefined) return true;
+  return typeof obj.productImagePath === "string";
 }
 
 function safeParse<T>(raw: string | null, guard: (value: unknown) => value is T): T | null {

@@ -77,7 +77,7 @@ export type UploadProductImageResponse = {
 
 export type GenerateAdRequest = {
   catalogModelId: string;
-  productImagePath: string;
+  productImagePath?: string;
   prompt: string;
   headline?: string;
   subhead?: string;
