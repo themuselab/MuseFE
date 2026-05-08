@@ -74,12 +74,21 @@ export function TextField({
       <div className="relative">
         <label
           htmlFor={id}
+          style={
+            isFloating
+              ? {
+                  background: `linear-gradient(to bottom, transparent 40%, var(${
+                    isDisabled ? "--color-neutral-300" : "--color-neutral-50"
+                  }) 40%)`,
+                }
+              : undefined
+          }
           className={[
             "absolute left-3 transition-all pointer-events-none z-10",
             "font-medium text-[14px] leading-[1.14]",
             labelColor,
             isFloating
-              ? "-top-1.75 bg-neutral-50 px-0.5"
+              ? "-top-1.75 px-0.5"
               : "top-1/2 -translate-y-1/2 bg-transparent",
           ]
             .filter(Boolean)

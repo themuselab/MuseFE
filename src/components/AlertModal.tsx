@@ -37,6 +37,7 @@ const sizeConfig: Record<AlertModalSize, {
   padding: string;
   gap: string;
   buttonGap: string;
+  buttonDirection: "row" | "col";
   buttonSize: "medium" | "large";
   titleFont: string;
   descFont: string;
@@ -47,6 +48,7 @@ const sizeConfig: Record<AlertModalSize, {
     padding: "pt-8 px-6 pb-6",
     gap: "gap-8",
     buttonGap: "gap-2",
+    buttonDirection: "row",
     buttonSize: "medium",
     titleFont: "text-[18px] font-semibold leading-[1.556] tracking-[-0.36px]",
     descFont: "text-[14px] font-medium leading-[1.43] tracking-[-0.28px] text-[#94a3b8]",
@@ -57,6 +59,7 @@ const sizeConfig: Record<AlertModalSize, {
     padding: "pt-12 px-10 pb-10",
     gap: "gap-14",
     buttonGap: "gap-4",
+    buttonDirection: "col",
     buttonSize: "large",
     titleFont: "text-[24px] font-semibold leading-[1.333] tracking-[-0.48px]",
     descFont: "text-[18px] font-medium leading-[1.556] tracking-[-0.36px] text-[#94a3b8]",
@@ -128,12 +131,18 @@ export function AlertModal({
           </div>
 
           {/* 버튼 */}
-          <div className={["flex flex-col", config.buttonGap].join(" ")}>
+          <div
+            className={[
+              "flex",
+              config.buttonDirection === "row" ? "flex-row" : "flex-col",
+              config.buttonGap,
+            ].join(" ")}
+          >
             {secondaryLabel && (
               <Button
                 hierarchy="secondary"
                 size={config.buttonSize}
-                className="w-full"
+                className={config.buttonDirection === "row" ? "flex-1" : "w-full"}
                 onClick={onSecondary ?? onClose}
               >
                 {secondaryLabel}
@@ -142,7 +151,7 @@ export function AlertModal({
             <Button
               hierarchy="primary"
               size={config.buttonSize}
-              className="w-full"
+              className={config.buttonDirection === "row" ? "flex-1" : "w-full"}
               onClick={onPrimary ?? onClose}
             >
               {primaryLabel}
