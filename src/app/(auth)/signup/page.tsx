@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState, Suspense } from "react";
+import { useEffect, useState, useCallback, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { GNB } from "@/components/GNB";
+import { Toast } from "@/components/Toast";
 import { SignupStepper } from "./_components/SignupStepper";
 import { StepUserType } from "./_components/StepUserType";
 import { StepTerms } from "./_components/StepTerms";
@@ -14,6 +15,8 @@ import { useSignup } from "@/hooks/useSignup";
 import { useGoogleSignup } from "@/hooks/useGoogleSignup";
 import { authApi } from "@/api/auth";
 import type { SignupRequest, GoogleSignupRequest } from "@/types/auth";
+
+const EXPIRED_TOAST_DURATION_MS = 2500;
 
 function SignupContent() {
   const router = useRouter();
@@ -39,8 +42,17 @@ function SignupContent() {
   const [showCompleteModal, setShowCompleteModal] = useState(false);
   const [googleEmail, setGoogleEmail] = useState<string | null>(null);
   const [introPhase, setIntroPhase] = useState<"intro" | "exiting" | "done">("intro");
+  const [showExpiredToast, setShowExpiredToast] = useState(false);
 
   const isGoogleFlow = !!pendingCode;
+
+  const handleExpired = useCallback(() => {
+    setShowExpiredToast((prev) => {
+      if (prev) return prev;
+      setTimeout(() => router.replace("/login"), EXPIRED_TOAST_DURATION_MS);
+      return true;
+    });
+  }, [router]);
 
   // Intro animation: show intro for 1.5s, then exit transition
   useEffect(() => {
@@ -54,14 +66,15 @@ function SignupContent() {
 
   // Fetch google pending email
   useEffect(() => {
-    if (pendingCode && !googleEmail) {
-      authApi.googlePending(pendingCode).then((res) => {
-        if (res.success) {
-          setGoogleEmail(res.data.email);
-        }
-      });
-    }
-  }, [pendingCode, googleEmail]);
+    if (!pendingCode || googleEmail || showExpiredToast) return;
+    authApi.googlePending(pendingCode).then((res) => {
+      if (res.success) {
+        setGoogleEmail(res.data.email);
+      } else if (res.error.code === "AUTH_CODE_EXPIRED") {
+        handleExpired();
+      }
+    });
+  }, [pendingCode, googleEmail, showExpiredToast, handleExpired]);
 
   const handleSubmit = () => {
     if (isGoogleFlow && pendingCode) {
@@ -86,6 +99,8 @@ function SignupContent() {
         onSuccess: (res) => {
           if (res.success) {
             setShowCompleteModal(true);
+          } else if (res.error.code === "AUTH_CODE_EXPIRED") {
+            handleExpired();
           }
         },
       });
@@ -259,6 +274,14 @@ function SignupContent() {
       <SignupCompleteModal
         open={showCompleteModal}
         onClose={() => setShowCompleteModal(false)}
+      />
+
+      <Toast
+        open={showExpiredToast}
+        onClose={() => setShowExpiredToast(false)}
+        message="인증 시간이 만료됐어요. 다시 구글 로그인을 해주세요."
+        variant="error"
+        durationMs={EXPIRED_TOAST_DURATION_MS}
       />
     </div>
   );
